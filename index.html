@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retirement & Wealth Planner</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-1: #eff6ff;
+      --bg-2: #f8fafc;
+      --bg-3: #ecfdf5;
+      --card: rgba(255, 255, 255, 0.94);
+      --card-solid: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --line: #dbe4f0;
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --green: #16a34a;
+      --green-soft: #dcfce7;
+      --purple: #9333ea;
+      --orange: #ea580c;
+      --yellow-soft: #fef3c7;
+      --red: #dc2626;
+      --red-soft: #fee2e2;
+      --slate: #0f172a;
+      --shadow: 0 16px 40px rgba(15, 23, 42, 0.09);
+      --shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.06);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(59,130,246,0.18), transparent 24%),
+        radial-gradient(circle at top right, rgba(168,85,247,0.14), transparent 20%),
+        radial-gradient(circle at bottom left, rgba(34,197,94,0.12), transparent 22%),
+        linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 46%, var(--bg-3) 100%);
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .shell {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin-bottom: 18px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      top: -30px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37,99,235,0.14), transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #dbeafe 0%, #ede9fe 100%);
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 38px;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #0f172a 0%, #2563eb 45%, #9333ea 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    @media (min-width: 1100px) {
+      .layout {
+        grid-template-columns: 460px minmax(0, 1fr);
+        align-items: start;
+      }
+
+      .left-column {
+        position: sticky;
+        top: 16px;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.75);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin: 0 0 6px;
+      font-size: 21px;
+      letter-spacing: -0.02em;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: var(--line);
+      margin: 14px 0 16px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+
+    .grid-3 {
+      grid-template-columns: 1fr;
+    }
+
+    .grid-4 {
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 720px) {
+      .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      background: #ffffff;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: 0.18s ease;
+      margin-bottom: 12px;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.18);
+    }
+
+    input::placeholder {
+      color: #94a3b8;
+    }
+
+    .field-note {
+      margin: -6px 0 12px;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .button-row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr;
+      margin-top: 8px;
+    }
+
+    @media (min-width: 520px) {
+      .button-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .btn,
+    .ghost-btn,
+    .planner-tab-btn,
+    .remove-account-btn {
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 16px;
+      transition: 0.18s ease;
+    }
+
+    .btn {
+      padding: 14px 16px;
+      color: white;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+      box-shadow: 0 10px 20px rgba(37,99,235,0.22);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .ghost-btn,
+    .remove-account-btn,
+    .planner-tab-btn {
+      padding: 12px 14px;
+      background: #ffffff;
+      color: var(--text);
+      border: 1px solid #cbd5e1;
+    }
+
+    .ghost-btn:hover,
+    .remove-account-btn:hover,
+    .planner-tab-btn:hover {
+      background: #f8fafc;
+    }
+
+    .planner-tab-btn.active {
+      background: linear-gradient(135deg, var(--slate) 0%, #334155 100%);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 8px 18px rgba(15,23,42,0.16);
+    }
+
+    details.module {
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.05);
+      margin-top: 12px;
+    }
+
+    details.module summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+    }
+
+    details.module summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .module-body {
+      padding: 16px;
+    }
+
+    .subtle-box {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .planner-account-row {
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      background: white;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.05);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .planner-account-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 820px) {
+      .planner-account-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .planner-account-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 6px;
+    }
+
+    .planner-top-card-grid,
+    #topCards {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 720px) {
+      .planner-top-card-grid,
+      #topCards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .planner-top-card-grid,
+      #topCards {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .planner-top-card,
+    .planner-detail-card,
+    .planner-panel {
+      background: white;
+      border: 1px solid #edf2f7;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+      padding: 16px;
+    }
+
+    .planner-top-card {
+      border-top: 4px solid var(--blue);
+    }
+
+    .planner-top-card-title {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .planner-top-card-value {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .planner-top-card-sub {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.45;
+    }
+
+    .planner-section-header {
+      margin-bottom: 12px;
+    }
+
+    .planner-section-heading {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 3px;
+    }
+
+    .planner-section-subheading {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .planner-subheading {
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: #1e293b;
+    }
+
+    .planner-two-col,
+    .planner-three-col,
+    .planner-four-col {
+      display: grid;
+      gap: 12px;
+    }
+
+    .planner-two-col {
+      grid-template-columns: 1fr;
+    }
+
+    .planner-three-col {
+      grid-template-columns: 1fr;
+    }
+
+    .planner-four-col {
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 720px) {
+      .planner-two-col {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .planner-three-col {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .planner-four-col {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .planner-mini-stat,
+    .planner-tax-box {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .planner-mini-stat-label {
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .planner-mini-stat-value {
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.1;
+      word-break: break-word;
+    }
+
+    .planner-mini-stat-sub {
+      color: #64748b;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .planner-body-copy {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .planner-big-callout-wrap {
+      background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
+      border: 1px solid #dbeafe;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .planner-big-callout {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+
+    .planner-big-callout-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 6px;
+    }
+
+    .planner-reason-list,
+    .planner-breakdown-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .planner-reason-item,
+    .planner-breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 14px;
+    }
+
+    .planner-reason-item:last-child,
+    .planner-breakdown-row:last-child {
+      border-bottom: none;
+    }
+
+    .planner-reason-bullet {
+      font-weight: 800;
+      margin-right: 8px;
+      color: var(--blue);
+    }
+
+    .planner-reason-text {
+      color: var(--text);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .planner-breakdown-label {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .planner-breakdown-value {
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .planner-alert,
+    .planner-info-note,
+    .planner-validation-card {
+      border-radius: 18px;
+    }
+
+    .planner-alert {
+      padding: 14px;
+      border: 1px solid transparent;
+      margin-bottom: 12px;
+    }
+
+    .planner-alert-title {
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .planner-alert-message,
+    .planner-alert-list {
+      font-size: 14px;
+      line-height: 1.55;
+      color: inherit;
+    }
+
+    .planner-alert-list {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+
+    .planner-alert-error {
+      background: var(--red-soft);
+      color: #991b1b;
+      border-color: #fecaca;
+    }
+
+    .planner-alert-warning {
+      background: var(--yellow-soft);
+      color: #92400e;
+      border-color: #fde68a;
+    }
+
+    .planner-alert-info {
+      background: #e0f2fe;
+      color: #0c4a6e;
+      border-color: #bae6fd;
+    }
+
+    .planner-info-note {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 12px 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .planner-info-note-title {
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .planner-empty-state {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px dashed #cbd5e1;
+      border-radius: 18px;
+      padding: 18px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .planner-empty-state-title {
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .planner-chart-grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .planner-two-chart-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .planner-single-chart-grid {
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 980px) {
+      .planner-two-chart-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .planner-chart-card {
+      min-height: 420px;
+    }
+
+    .planner-chart-wrap {
+      position: relative;
+      height: 320px;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100%;
+    }
+
+    .planner-table-wrap {
+      overflow-x: auto;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      margin-top: 10px;
+    }
+
+    .planner-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      min-width: 880px;
+    }
+
+    .planner-table th,
+    .planner-table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 13px;
+      vertical-align: top;
+    }
+
+    .planner-table th {
+      background: #f8fafc;
+      font-weight: 800;
+      color: #334155;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .planner-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .planner-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .tone-good {
+      border-top-color: var(--green);
+    }
+
+    .tone-mid {
+      border-top-color: #f59e0b;
+    }
+
+    .tone-bad {
+      border-top-color: var(--red);
+    }
+
+    .footer-space {
+      height: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="hero">
+      <div class="badge">Advanced Retirement + Wealth Planning</div>
+      <h1>Retirement & Wealth Planner</h1>
+      <p>
+        Build a full household plan with retirement accounts, brokerage assets, Roth vs pretax strategy,
+        taxes, Social Security, Monte Carlo analysis, retirement income planning, and long-term projections
+        all the way through your chosen planning age.
+      </p>
+    </section>
+
+    <div id="appErrorArea"></div>
+
+    <div class="layout">
+      <div class="left-column">
+        <form id="plannerForm" class="card">
+          <h2>Planner Inputs</h2>
+          <div class="muted">
+            Fill out the sections below, add accounts for you and your spouse, then run the planner to see
+            projections, recommendations, tax comparisons, retirement income analysis, and charts.
+          </div>
+
+          <div class="section-divider"></div>
+
+          <details class="module" open>
+            <summary>Your Core Info</summary>
+            <div class="module-body">
+              <div class="grid grid-2">
+                <div>
+                  <label for="currentAge">Current Age</label>
+                  <input id="currentAge" type="number" placeholder="24" />
+                </div>
+                <div>
+                  <label for="birthYear">Birth Year</label>
+                  <input id="birthYear" type="number" placeholder="2001" />
+                </div>
+                <div>
+                  <label for="retirementAge">Retirement Age</label>
+                  <input id="retirementAge" type="number" placeholder="55" />
+                </div>
+                <div>
+                  <label for="planningAge">Planning Age</label>
+                  <input id="planningAge" type="number" placeholder="90" />
+                </div>
+                <div>
+                  <label for="currentIncome">Current Income</label>
+                  <input id="currentIncome" type="number" placeholder="150000" />
+                </div>
+                <div>
+                  <label for="annualSpendingGoal">Annual Retirement Spending Goal</label>
+                  <input id="annualSpendingGoal" type="number" placeholder="120000" />
+                </div>
+                <div>
+                  <label for="personalPensionIncome">Annual Pension Income</label>
+                  <input id="personalPensionIncome" type="number" placeholder="0" />
+                </div>
+                <div>
+                  <label for="wantsEarlyRetirement">Early Retirement Focus</label>
+                  <div class="subtle-box">
+                    <label style="display:flex;align-items:center;gap:10px;margin:0;font-weight:700;">
+                      <input id="wantsEarlyRetirement" type="checkbox" style="width:auto;margin:0;" />
+                      I want the recommendation engine to factor in early retirement flexibility
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="module">
+            <summary>Spouse Info</summary>
+            <div class="module-body">
+              <div class="grid grid-2">
+                <div>
+                  <label for="spouseCurrentAge">Spouse Current Age</label>
+                  <input id="spouseCurrentAge" type="number" placeholder="24" />
+                </div>
+                <div>
+                  <label for="spouseBirthYear">Spouse Birth Year</label>
+                  <input id="spouseBirthYear" type="number" placeholder="2001" />
+                </div>
+                <div>
+                  <label for="spouseRetirementAge">Spouse Retirement Age</label>
+                  <input id="spouseRetirementAge" type="number" placeholder="55" />
+                </div>
+                <div>
+                  <label for="spousePlanningAge">Spouse Planning Age</label>
+                  <input id="spousePlanningAge" type="number" placeholder="90" />
+                </div>
+                <div>
+                  <label for="spouseCurrentIncome">Spouse Current Income</label>
+                  <input id="spouseCurrentIncome" type="number" placeholder="50000" />
+                </div>
+                <div>
+                  <label for="spousePensionIncome">Spouse Annual Pension Income</label>
+                  <input id="spousePensionIncome" type="number" placeholder="0" />
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="module">
+            <summary>Taxes + Planning Assumptions</summary>
+            <div class="module-body">
+              <div class="grid grid-2">
+                <div>
+                  <label for="filingStatus">Filing Status</label>
+                  <select id="filingStatus">
+                    <option value="single">Single</option>
+                    <option value="married">Married Filing Jointly</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="currentState">Current State</label>
+                  <select id="currentState"></select>
+                </div>
+                <div>
+                  <label for="retirementState">Retirement State</label>
+                  <select id="retirementState"></select>
+                </div>
+                <div>
+                  <label for="expectedReturn">Expected Return %</label>
+                  <input id="expectedReturn" type="number" step="0.1" placeholder="7" value="7" />
+                </div>
+                <div>
+                  <label for="expectedVolatility">Expected Volatility %</label>
+                  <input id="expectedVolatility" type="number" step="0.1" placeholder="15" value="15" />
+                </div>
+                <div>
+                  <label for="expectedInflation">Expected Inflation %</label>
+                  <input id="expectedInflation" type="number" step="0.1" placeholder="2.5" value="2.5" />
+                </div>
+                <div>
+                  <label for="annualContributionGrowthRate">Annual Savings Growth %</label>
+                  <input id="annualContributionGrowthRate" type="number" step="0.1" placeholder="3" />
+                </div>
+                <div>
+                  <label for="simulationCount">Monte Carlo Simulations</label>
+                  <input id="simulationCount" type="number" placeholder="1000" value="1000" />
+                </div>
+                <div>
+                  <label for="spendingGrowthMode">Retirement Spending Growth</label>
+                  <select id="spendingGrowthMode">
+                    <option value="inflation">Inflation Adjusted</option>
+                    <option value="flat">Flat Spending</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="currentTotalInvestedAssets">Current Total Invested Assets</label>
+                  <input id="currentTotalInvestedAssets" type="number" placeholder="175000" />
+                </div>
+                <div>
+                  <label for="totalAnnualRetirementContribution">Total Annual Retirement Contribution</label>
+                  <input id="totalAnnualRetirementContribution" type="number" placeholder="35000" />
+                </div>
+                <div>
+                  <label for="totalAnnualSavings">Total Annual Savings</label>
+                  <input id="totalAnnualSavings" type="number" placeholder="45000" />
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="module">
+            <summary>Social Security Inputs</summary>
+            <div class="module-body">
+              <div class="subtle-box" style="margin-bottom:12px;">
+                <div class="muted">
+                  Enter your estimated Primary Insurance Amount (PIA) monthly amount at full retirement age.
+                  The planner will compare claiming ages and use your chosen age in the household retirement income plan.
+                </div>
+              </div>
+
+              <div class="grid grid-2">
+                <div>
+                  <label for="ssClaimAge">Your Social Security Claim Age</label>
+                  <input id="ssClaimAge" type="number" step="0.1" placeholder="67" value="67" />
+                </div>
+                <div>
+                  <label for="ssPIAMonthly">Your PIA Monthly Benefit</label>
+                  <input id="ssPIAMonthly" type="number" placeholder="2800" />
+                </div>
+                <div>
+                  <label for="spouseSSClaimAge">Spouse Claim Age</label>
+                  <input id="spouseSSClaimAge" type="number" step="0.1" placeholder="67" value="67" />
+                </div>
+                <div>
+                  <label for="spouseSSPIAMonthly">Spouse PIA Monthly Benefit</label>
+                  <input id="spouseSSPIAMonthly" type="number" placeholder="1800" />
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="module" open>
+            <summary>Your Accounts</summary>
+            <div class="module-body">
+              <div class="field-note">
+                Add each account you want included. For 401(k), 403(b), and 457 plans, use employee contribution %
+                and the Roth slider %. Employer contributions are automatically treated as pretax.
+              </div>
+              <div id="accountsContainer"></div>
+              <button type="button" id="addAccountBtn" class="ghost-btn">Add Your Account</button>
+            </div>
+          </details>
+
+          <details class="module">
+            <summary>Spouse Accounts</summary>
+            <div class="module-body">
+              <div class="field-note">
+                Add spouse retirement and non-retirement accounts here to build a complete household plan.
+              </div>
+              <div id="spouseAccountsContainer"></div>
+              <button type="button" id="addSpouseAccountBtn" class="ghost-btn">Add Spouse Account</button>
+            </div>
+          </details>
+
+          <div class="button-row">
+            <button type="button" id="runPlannerBtn" class="btn">Run Planner</button>
+            <button type="button" id="resetPlannerBtn" class="ghost-btn">Reset Planner</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="right-column">
+        <div id="validationArea"></div>
+
+        <section class="card">
+          <h2>Dashboard</h2>
+          <div class="muted">
+            Once you run the planner, your summary cards, recommendations, tax analysis, Social Security estimates,
+            Monte Carlo results, and projected balances will appear here.
+          </div>
+
+          <div style="height:12px;"></div>
+          <div id="topCards"></div>
+        </section>
+
+        <section class="grid">
+          <div id="recommendationArea"></div>
+          <div id="taxArea"></div>
+          <div id="socialSecurityArea"></div>
+          <div id="incomePlanArea"></div>
+          <div id="monteCarloArea"></div>
+          <div id="accountBreakdownArea"></div>
+        </section>
+
+        <section class="planner-chart-grid planner-two-chart-grid">
+          <div class="planner-detail-card planner-chart-card">
+            <div class="planner-section-header">
+              <div class="planner-section-heading">Retirement Accounts Breakdown</div>
+              <div class="planner-section-subheading">Projected retirement account balances at retirement</div>
+            </div>
+            <div class="planner-chart-wrap">
+              <canvas id="retirementBreakdownChart"></canvas>
+            </div>
+          </div>
+
+          <div class="planner-detail-card planner-chart-card">
+            <div class="planner-section-header">
+              <div class="planner-section-heading">Non-Retirement Accounts Breakdown</div>
+              <div class="planner-section-subheading">Projected brokerage, savings, cash, and other non-qualified assets</div>
+            </div>
+            <div class="planner-chart-wrap">
+              <canvas id="nonRetirementBreakdownChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <section class="planner-chart-grid planner-single-chart-grid">
+          <div class="planner-detail-card planner-chart-card">
+            <div class="planner-section-header">
+              <div class="planner-section-heading">Projected Wealth Growth</div>
+              <div class="planner-section-subheading">Accumulation phase from today through retirement age</div>
+            </div>
+            <div class="planner-chart-wrap">
+              <canvas id="growthProjectionChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <section class="planner-chart-grid planner-two-chart-grid">
+          <div class="planner-detail-card planner-chart-card">
+            <div class="planner-section-header">
+              <div class="planner-section-heading">Roth vs Pretax vs Taxable</div>
+              <div class="planner-section-subheading">Projected tax bucket mix at retirement</div>
+            </div>
+            <div class="planner-chart-wrap">
+              <canvas id="rothPretaxChart"></canvas>
+            </div>
+          </div>
+
+          <div class="planner-detail-card planner-chart-card">
+            <div class="planner-section-header">
+              <div class="planner-section-heading">Household Net Worth Projection</div>
+              <div class="planner-section-subheading">Your balances, spouse balances, and combined household total</div>
+            </div>
+            <div class="planner-chart-wrap">
+              <canvas id="householdNetWorthChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <section class="planner-chart-grid planner-single-chart-grid">
+          <div class="planner-detail-card planner-chart-card">
+            <div class="planner-section-header">
+              <div class="planner-section-heading">Retirement Income vs Expenses</div>
+              <div class="planner-section-subheading">Portfolio withdrawals, guaranteed income, and spending target through retirement</div>
+            </div>
+            <div class="planner-chart-wrap">
+              <canvas id="retirementIncomeChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <div class="footer-space"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
