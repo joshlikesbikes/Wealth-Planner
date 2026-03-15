@@ -43,7 +43,7 @@
     body { padding: 14px; }
 
     .app {
-      max-width: 1420px;
+      max-width: 1450px;
       margin: 0 auto;
     }
 
@@ -79,9 +79,7 @@
     }
 
     @media (max-width: 980px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+      .grid { grid-template-columns: 1fr; }
     }
 
     .section {
@@ -114,7 +112,8 @@
     .two-col,
     .three-col,
     .four-col,
-    .five-col {
+    .five-col,
+    .six-col {
       display: grid;
       gap: 12px;
       margin-bottom: 12px;
@@ -124,18 +123,20 @@
     .three-col { grid-template-columns: repeat(3, minmax(0,1fr)); }
     .four-col { grid-template-columns: repeat(4, minmax(0,1fr)); }
     .five-col { grid-template-columns: repeat(5, minmax(0,1fr)); }
+    .six-col { grid-template-columns: repeat(6, minmax(0,1fr)); }
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1200px) {
+      .six-col { grid-template-columns: repeat(3, minmax(0,1fr)); }
       .five-col { grid-template-columns: repeat(3, minmax(0,1fr)); }
     }
 
     @media (max-width: 900px) {
-      .four-col, .five-col { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .four-col, .five-col, .six-col { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .three-col { grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
 
     @media (max-width: 640px) {
-      .two-col, .three-col, .four-col, .five-col {
+      .two-col, .three-col, .four-col, .five-col, .six-col {
         grid-template-columns: 1fr;
       }
     }
@@ -156,6 +157,7 @@
       font-size: 0.76rem;
       color: var(--muted);
       margin-top: -2px;
+      line-height: 1.35;
     }
 
     input, select {
@@ -167,7 +169,7 @@
       padding: 12px 12px;
       font-size: 0.96rem;
       outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     input:focus, select:focus {
@@ -175,9 +177,7 @@
       box-shadow: 0 0 0 4px rgba(37,99,235,0.10);
     }
 
-    input::placeholder {
-      color: #9aa8bb;
-    }
+    input::placeholder { color: #9aa8bb; }
 
     .toggle-grid {
       display: grid;
@@ -187,9 +187,7 @@
     }
 
     @media (max-width: 640px) {
-      .toggle-grid {
-        grid-template-columns: 1fr;
-      }
+      .toggle-grid { grid-template-columns: 1fr; }
     }
 
     .toggle-card {
@@ -314,12 +312,10 @@
       font-size: 0.95rem;
       font-weight: 800;
       cursor: pointer;
-      transition: transform 0.14s ease, box-shadow 0.14s ease, opacity 0.14s ease, background 0.2s ease;
+      transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.2s ease;
     }
 
-    button:hover {
-      transform: translateY(-1px);
-    }
+    button:hover { transform: translateY(-1px); }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--blue), #4f46e5);
@@ -347,9 +343,7 @@
     }
 
     @media (max-width: 640px) {
-      .results-grid {
-        grid-template-columns: 1fr;
-      }
+      .results-grid { grid-template-columns: 1fr; }
     }
 
     .stat {
@@ -425,9 +419,7 @@
       font-size: 0.92rem;
     }
 
-    .charts-section {
-      margin-top: 16px;
-    }
+    .charts-section { margin-top: 16px; }
 
     .chart-grid {
       display: grid;
@@ -440,12 +432,9 @@
       border: 1px solid var(--line);
       border-radius: 22px;
       padding: 16px;
-      margin-top: 0;
     }
 
-    .chart-card h3 {
-      margin-bottom: 4px;
-    }
+    .chart-card h3 { margin-bottom: 4px; }
 
     .chart-card p {
       margin: 0 0 12px;
@@ -454,19 +443,61 @@
       line-height: 1.45;
     }
 
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+    }
+
     canvas {
       width: 100%;
-      height: 420px;
+      height: 430px;
       display: block;
       background: linear-gradient(180deg, rgba(248,250,252,0.7), rgba(255,255,255,0.96));
       border-radius: 18px;
       border: 1px solid #edf2f8;
+      cursor: crosshair;
     }
 
     @media (max-width: 640px) {
-      canvas {
-        height: 320px;
-      }
+      canvas { height: 320px; }
+    }
+
+    .chart-tooltip {
+      position: absolute;
+      pointer-events: none;
+      min-width: 220px;
+      max-width: 360px;
+      background: rgba(18,32,51,0.96);
+      color: white;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      box-shadow: 0 12px 28px rgba(15,23,42,0.28);
+      transform: translate(12px, -12px);
+      z-index: 5;
+      display: none;
+    }
+
+    .chart-tooltip strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.88rem;
+    }
+
+    .tooltip-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tooltip-dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      margin-right: 6px;
+      vertical-align: middle;
     }
 
     .footnote {
@@ -476,19 +507,9 @@
       margin-top: 12px;
     }
 
-    .hidden {
-      display: none !important;
-    }
-
-    .tiny {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    .accent {
-      font-weight: 800;
-      color: #0f3f7e;
-    }
+    .hidden { display: none !important; }
+    .tiny { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+    .accent { font-weight: 800; color: #0f3f7e; }
   </style>
 </head>
 <body>
@@ -498,7 +519,7 @@
       <p>
         Build a cleaner full-picture projection for you and your spouse. Turn on only the account types you actually have,
         enter balances and contributions, and instantly see retirement totals, non-retirement totals, future projections,
-        and a simple Roth vs pretax breakdown where it actually makes sense.
+        pretax vs Roth visuals, and post-retirement drawdown.
       </p>
     </div>
 
@@ -506,41 +527,37 @@
       <div>
         <div class="section">
           <h2>Core assumptions</h2>
-          <p class="sub">These settings drive the projection before and after retirement.</p>
+          <p class="sub">These settings drive the timeline, withdrawal period, and rough tax summary.</p>
 
-          <div class="five-col">
+          <div class="six-col">
             <div class="field">
               <label for="currentAge">Your current age</label>
               <input id="currentAge" type="number" placeholder="25" min="0" max="100" />
             </div>
             <div class="field">
-              <label for="retirementAge">Retirement age</label>
+              <label for="retirementAge">Your retirement age</label>
               <input id="retirementAge" type="number" placeholder="60" min="1" max="100" />
             </div>
             <div class="field">
-              <label for="lifeExpectancy">Life expectancy</label>
+              <label for="lifeExpectancy">Your life expectancy</label>
               <input id="lifeExpectancy" type="number" placeholder="90" min="1" max="120" />
             </div>
-            <div class="field">
-              <label for="annualGrowth">Average annual growth rate (%)</label>
-              <input id="annualGrowth" type="number" step="0.1" placeholder="8" min="0" max="20" />
-            </div>
-            <div class="field">
-              <label for="inflationRate">Optional inflation rate (%)</label>
-              <input id="inflationRate" type="number" step="0.1" placeholder="3" min="0" max="10" />
-            </div>
-          </div>
-
-          <div class="four-col">
             <div class="field">
               <label for="monthlyNeed">Monthly retirement withdrawal ($)</label>
               <input id="monthlyNeed" type="number" min="0" step="100" placeholder="8000" />
             </div>
             <div class="field">
+              <label for="inflationRate">Optional inflation rate (%)</label>
+              <input id="inflationRate" type="number" step="0.1" placeholder="3" min="0" max="10" />
+            </div>
+            <div class="field">
               <label for="stateSelect">State</label>
               <select id="stateSelect"></select>
-              <div class="hint">Used only for a rough state tax estimate in the summary.</div>
+              <div class="hint">Used only for a rough state tax estimate.</div>
             </div>
+          </div>
+
+          <div class="three-col">
             <div class="field">
               <label for="filingStatus">Filing status</label>
               <select id="filingStatus">
@@ -555,23 +572,16 @@
                 <option value="yes">Yes - also show today's dollars</option>
               </select>
             </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <h2>Your profile</h2>
-          <p class="sub">Enter your income and turn on only the accounts you want included.</p>
-
-          <div class="two-col">
             <div class="field">
               <label for="myIncome">Your annual income ($)</label>
               <input id="myIncome" type="number" min="0" step="100" placeholder="80000" />
             </div>
           </div>
+        </div>
 
-          <div class="divider"></div>
-
-          <h3>Select your accounts</h3>
+        <div class="section">
+          <h2>Your accounts</h2>
+          <p class="sub">Turn on only the account types you want included.</p>
           <div id="myAccountToggles" class="toggle-grid"></div>
           <div id="myAccountsContainer"></div>
         </div>
@@ -580,7 +590,7 @@
           <h2>Spouse section</h2>
           <p class="sub">Turn this on only if you want the family picture included.</p>
 
-          <div class="two-col">
+          <div class="four-col">
             <div class="field">
               <label for="includeSpouse">Include spouse?</label>
               <select id="includeSpouse">
@@ -589,6 +599,21 @@
               </select>
             </div>
             <div class="field spouse-only hidden">
+              <label for="spouseAge">Spouse current age</label>
+              <input id="spouseAge" type="number" min="0" max="100" placeholder="24" />
+            </div>
+            <div class="field spouse-only hidden">
+              <label for="spouseRetirementAge">Spouse retirement age</label>
+              <input id="spouseRetirementAge" type="number" min="1" max="100" placeholder="60" />
+            </div>
+            <div class="field spouse-only hidden">
+              <label for="spouseLifeExpectancy">Spouse life expectancy</label>
+              <input id="spouseLifeExpectancy" type="number" min="1" max="120" placeholder="90" />
+            </div>
+          </div>
+
+          <div class="two-col spouse-only hidden">
+            <div class="field">
               <label for="spouseIncome">Spouse annual income ($)</label>
               <input id="spouseIncome" type="number" min="0" step="100" placeholder="50000" />
             </div>
@@ -604,7 +629,7 @@
 
         <div class="section">
           <h2>Run the calculator</h2>
-          <p class="sub">Once you click calculate, the summary, totals, and charts will update below.</p>
+          <p class="sub">Once you click calculate, the summary, totals, and charts update below.</p>
           <div class="btn-row">
             <button class="btn-primary" id="calculateBtn">Calculate everything</button>
             <button class="btn-secondary" id="resetBtn">Reset to defaults</button>
@@ -619,24 +644,24 @@
 
           <div class="results-grid">
             <div class="stat blue">
-              <div class="label">Projected retirement accounts at retirement</div>
+              <div class="label">Projected retirement accounts at your retirement</div>
               <div class="value" id="retirementFutureValue">$0</div>
-              <div class="mini" id="retirementFutureMini">Includes all enabled retirement accounts.</div>
+              <div class="mini" id="retirementFutureMini">Includes enabled retirement accounts.</div>
             </div>
             <div class="stat green">
-              <div class="label">Projected non-retirement accounts at retirement</div>
+              <div class="label">Projected non-retirement accounts at your retirement</div>
               <div class="value" id="nonRetirementFutureValue">$0</div>
               <div class="mini" id="nonRetirementFutureMini">Brokerage, HYSA, cash savings, etc.</div>
             </div>
             <div class="stat purple">
-              <div class="label">Total annual contributions</div>
+              <div class="label">Total annual contributions right now</div>
               <div class="value" id="annualContributionValue">$0</div>
               <div class="mini" id="annualContributionMini">Personal + employer + spouse where included.</div>
             </div>
             <div class="stat orange">
-              <div class="label">Total projected net worth at retirement</div>
+              <div class="label">Total projected net worth at your retirement</div>
               <div class="value" id="grandFutureValue">$0</div>
-              <div class="mini" id="grandFutureMini">Retirement + non-retirement future values combined.</div>
+              <div class="mini" id="grandFutureMini">Retirement + non-retirement combined.</div>
             </div>
           </div>
 
@@ -652,7 +677,7 @@
                   <th>Account</th>
                   <th>Current balance</th>
                   <th>Annual contribution</th>
-                  <th>Projected at retirement</th>
+                  <th>Projected at your retirement</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -667,7 +692,7 @@
                   <th>Account</th>
                   <th>Current balance</th>
                   <th>Annual contribution</th>
-                  <th>Projected at retirement</th>
+                  <th>Projected at your retirement</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -675,8 +700,7 @@
           </div>
 
           <div class="footnote">
-            This calculator is for planning only. Tax estimates are simplified and rounded. It does not apply IRS contribution limits,
-            catch-up rules, changing salary over time, RMD rules, or account-specific tax treatment beyond a basic summary.
+            Planning tool only. Tax and retirement estimates are simplified. For mixed workplace accounts, the current balance is split between pretax and Roth using the same Roth slider ratio you choose for that account.
           </div>
         </div>
       </div>
@@ -685,15 +709,21 @@
     <div class="charts-section">
       <div class="chart-grid">
         <div class="chart-card">
-          <h3>Retirement assets through retirement and life expectancy</h3>
-          <p>This chart grows retirement accounts until retirement, then reduces them after retirement based on your monthly withdrawal target while still applying annual growth.</p>
-          <canvas id="retirementChart" width="1200" height="420"></canvas>
+          <h3>Retirement assets over time</h3>
+          <p>Blue shows pretax retirement money. Purple shows Roth retirement money. The vertical line marks your retirement year, and a second dashed line appears if spouse retirement age is different.</p>
+          <div class="chart-wrap">
+            <canvas id="retirementChart" width="1250" height="430"></canvas>
+            <div class="chart-tooltip" id="retirementTooltip"></div>
+          </div>
         </div>
 
         <div class="chart-card">
-          <h3>Non-retirement assets through retirement and life expectancy</h3>
-          <p>This chart grows brokerage, savings, and other non-retirement assets until retirement, then reduces them after retirement based on the same monthly withdrawal pattern.</p>
-          <canvas id="nonRetirementChart" width="1200" height="420"></canvas>
+          <h3>Non-retirement assets over time</h3>
+          <p>This chart shows brokerage, HYSA, and other non-retirement assets before and after retirement. Hover or click to see the breakdown by source.</p>
+          <div class="chart-wrap">
+            <canvas id="nonRetirementChart" width="1250" height="430"></canvas>
+            <div class="chart-tooltip" id="nonRetirementTooltip"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -701,136 +731,37 @@
 
   <script>
     const states = [
-      { name: "Alabama", rate: 0.05 },
-      { name: "Alaska", rate: 0.00 },
-      { name: "Arizona", rate: 0.025 },
-      { name: "Arkansas", rate: 0.049 },
-      { name: "California", rate: 0.093 },
-      { name: "Colorado", rate: 0.044 },
-      { name: "Connecticut", rate: 0.05 },
-      { name: "Delaware", rate: 0.052 },
-      { name: "Florida", rate: 0.00 },
-      { name: "Georgia", rate: 0.053 },
-      { name: "Hawaii", rate: 0.08 },
-      { name: "Idaho", rate: 0.058 },
-      { name: "Illinois", rate: 0.0495 },
-      { name: "Indiana", rate: 0.0315 },
-      { name: "Iowa", rate: 0.039 },
-      { name: "Kansas", rate: 0.052 },
-      { name: "Kentucky", rate: 0.045 },
-      { name: "Louisiana", rate: 0.03 },
-      { name: "Maine", rate: 0.063 },
-      { name: "Maryland", rate: 0.05 },
-      { name: "Massachusetts", rate: 0.05 },
-      { name: "Michigan", rate: 0.0425 },
-      { name: "Minnesota", rate: 0.068 },
-      { name: "Mississippi", rate: 0.047 },
-      { name: "Missouri", rate: 0.047 },
-      { name: "Montana", rate: 0.056 },
-      { name: "Nebraska", rate: 0.055 },
-      { name: "Nevada", rate: 0.00 },
-      { name: "New Hampshire", rate: 0.00 },
-      { name: "New Jersey", rate: 0.057 },
-      { name: "New Mexico", rate: 0.049 },
-      { name: "New York", rate: 0.061 },
-      { name: "North Carolina", rate: 0.045 },
-      { name: "North Dakota", rate: 0.025 },
-      { name: "Ohio", rate: 0.035 },
-      { name: "Oklahoma", rate: 0.04 },
-      { name: "Oregon", rate: 0.087 },
-      { name: "Pennsylvania", rate: 0.0307 },
-      { name: "Rhode Island", rate: 0.05 },
-      { name: "South Carolina", rate: 0.06 },
-      { name: "South Dakota", rate: 0.00 },
-      { name: "Tennessee", rate: 0.00 },
-      { name: "Texas", rate: 0.00 },
-      { name: "Utah", rate: 0.0485 },
-      { name: "Vermont", rate: 0.068 },
-      { name: "Virginia", rate: 0.05 },
-      { name: "Washington", rate: 0.00 },
-      { name: "West Virginia", rate: 0.051 },
-      { name: "Wisconsin", rate: 0.053 },
-      { name: "Wyoming", rate: 0.00 }
+      { name: "Alabama", rate: 0.05 }, { name: "Alaska", rate: 0.00 }, { name: "Arizona", rate: 0.025 },
+      { name: "Arkansas", rate: 0.049 }, { name: "California", rate: 0.093 }, { name: "Colorado", rate: 0.044 },
+      { name: "Connecticut", rate: 0.05 }, { name: "Delaware", rate: 0.052 }, { name: "Florida", rate: 0.00 },
+      { name: "Georgia", rate: 0.053 }, { name: "Hawaii", rate: 0.08 }, { name: "Idaho", rate: 0.058 },
+      { name: "Illinois", rate: 0.0495 }, { name: "Indiana", rate: 0.0315 }, { name: "Iowa", rate: 0.039 },
+      { name: "Kansas", rate: 0.052 }, { name: "Kentucky", rate: 0.045 }, { name: "Louisiana", rate: 0.03 },
+      { name: "Maine", rate: 0.063 }, { name: "Maryland", rate: 0.05 }, { name: "Massachusetts", rate: 0.05 },
+      { name: "Michigan", rate: 0.0425 }, { name: "Minnesota", rate: 0.068 }, { name: "Mississippi", rate: 0.047 },
+      { name: "Missouri", rate: 0.047 }, { name: "Montana", rate: 0.056 }, { name: "Nebraska", rate: 0.055 },
+      { name: "Nevada", rate: 0.00 }, { name: "New Hampshire", rate: 0.00 }, { name: "New Jersey", rate: 0.057 },
+      { name: "New Mexico", rate: 0.049 }, { name: "New York", rate: 0.061 }, { name: "North Carolina", rate: 0.045 },
+      { name: "North Dakota", rate: 0.025 }, { name: "Ohio", rate: 0.035 }, { name: "Oklahoma", rate: 0.04 },
+      { name: "Oregon", rate: 0.087 }, { name: "Pennsylvania", rate: 0.0307 }, { name: "Rhode Island", rate: 0.05 },
+      { name: "South Carolina", rate: 0.06 }, { name: "South Dakota", rate: 0.00 }, { name: "Tennessee", rate: 0.00 },
+      { name: "Texas", rate: 0.00 }, { name: "Utah", rate: 0.0485 }, { name: "Vermont", rate: 0.068 },
+      { name: "Virginia", rate: 0.05 }, { name: "Washington", rate: 0.00 }, { name: "West Virginia", rate: 0.051 },
+      { name: "Wisconsin", rate: 0.053 }, { name: "Wyoming", rate: 0.00 }
     ];
 
     const accountDefs = [
-      {
-        key: "trad401k",
-        name: "401(k)",
-        category: "retirement",
-        description: "Traditional/Roth split, employer match, and profit sharing.",
-        fields: "workplace"
-      },
-      {
-        key: "trad403b",
-        name: "403(b)",
-        category: "retirement",
-        description: "403(b) with employee contribution and employer contribution options.",
-        fields: "workplace"
-      },
-      {
-        key: "account457b",
-        name: "457(b)",
-        category: "retirement",
-        description: "457(b) account with employee contribution and optional employer contribution fields.",
-        fields: "workplace"
-      },
-      {
-        key: "account401a",
-        name: "401(a)",
-        category: "retirement",
-        description: "Useful for employer-driven retirement contributions.",
-        fields: "employerHeavy"
-      },
-      {
-        key: "rothIRA",
-        name: "Roth IRA",
-        category: "retirement",
-        description: "No employer contribution fields here.",
-        fields: "simpleRetirement"
-      },
-      {
-        key: "tradIRA",
-        name: "Traditional IRA",
-        category: "retirement",
-        description: "Simple IRA input with no workplace fields.",
-        fields: "simpleRetirement"
-      },
-      {
-        key: "hsa",
-        name: "HSA",
-        category: "retirement",
-        description: "Treated here as a long-term account for planning.",
-        fields: "simpleRetirement"
-      },
-      {
-        key: "pension",
-        name: "Pension",
-        category: "retirement",
-        description: "Enter the estimated monthly pension income you expect in retirement.",
-        fields: "pension"
-      },
-      {
-        key: "brokerage",
-        name: "Brokerage",
-        category: "nonretirement",
-        description: "Taxable investment account.",
-        fields: "simpleNonRetirement"
-      },
-      {
-        key: "hysa",
-        name: "HYSA / Savings",
-        category: "nonretirement",
-        description: "Cash savings or emergency fund growth.",
-        fields: "simpleNonRetirement"
-      },
-      {
-        key: "cash",
-        name: "Other cash / investments",
-        category: "nonretirement",
-        description: "Any other non-retirement account you want included.",
-        fields: "simpleNonRetirement"
-      }
+      { key: "trad401k", name: "401(k)", category: "retirement", description: "Traditional/Roth split, employer match, and profit sharing.", fields: "workplace" },
+      { key: "trad403b", name: "403(b)", category: "retirement", description: "403(b) with employee contribution and employer contribution options.", fields: "workplace" },
+      { key: "account457b", name: "457(b)", category: "retirement", description: "457(b) account with employee contribution and optional employer contribution fields.", fields: "workplace" },
+      { key: "account401a", name: "401(a)", category: "retirement", description: "Useful for employer-driven retirement contributions.", fields: "employerHeavy" },
+      { key: "rothIRA", name: "Roth IRA", category: "retirement", description: "No employer contribution fields here.", fields: "simpleRetirement" },
+      { key: "tradIRA", name: "Traditional IRA", category: "retirement", description: "Simple IRA input with no workplace fields.", fields: "simpleRetirement" },
+      { key: "hsa", name: "HSA", category: "retirement", description: "Treated here as a long-term account for planning.", fields: "simpleRetirement" },
+      { key: "pension", name: "Pension", category: "retirement", description: "Enter estimated monthly pension income in retirement.", fields: "pension" },
+      { key: "brokerage", name: "Brokerage", category: "nonretirement", description: "Taxable investment account.", fields: "simpleNonRetirement" },
+      { key: "hysa", name: "HYSA / Savings", category: "nonretirement", description: "Cash savings or emergency fund growth.", fields: "simpleNonRetirement" },
+      { key: "cash", name: "Other cash / investments", category: "nonretirement", description: "Any other non-retirement account you want included.", fields: "simpleNonRetirement" }
     ];
 
     const stateSelect = document.getElementById("stateSelect");
@@ -844,36 +775,62 @@
     const calculateBtn = document.getElementById("calculateBtn");
 
     let isCalculated = false;
+    let chartState = {
+      retirement: null,
+      nonretirement: null
+    };
 
     function money(n) {
       if (!isFinite(n)) n = 0;
-      return n.toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-        maximumFractionDigits: 0
-      });
+      return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
     }
 
     function pct(n) {
       return `${Number(n || 0).toFixed(1)}%`;
     }
 
+    function getEl(id) {
+      return document.getElementById(id);
+    }
+
     function num(id) {
-      const el = document.getElementById(id);
+      const el = getEl(id);
       if (!el || el.value === "") return 0;
       return Number(el.value || 0);
     }
 
-    function yearsUntilRetirement() {
-      const currentAge = num("currentAge");
-      const retirementAge = num("retirementAge");
-      return Math.max(0, retirementAge - currentAge);
+    function hasValue(id) {
+      const el = getEl(id);
+      return !!el && el.value !== "";
     }
 
-    function yearsAfterRetirement() {
-      const retirementAge = num("retirementAge");
-      const lifeExpectancy = num("lifeExpectancy");
-      return Math.max(0, lifeExpectancy - retirementAge);
+    function yearsUntilRetirement() {
+      return Math.max(0, num("retirementAge") - num("currentAge"));
+    }
+
+    function getUserProfile() {
+      return {
+        owner: "You",
+        currentAge: num("currentAge"),
+        retirementAge: num("retirementAge"),
+        lifeExpectancy: num("lifeExpectancy"),
+        income: num("myIncome")
+      };
+    }
+
+    function getSpouseProfile() {
+      return {
+        owner: "Spouse",
+        currentAge: num("spouseAge"),
+        retirementAge: num("spouseRetirementAge"),
+        lifeExpectancy: num("spouseLifeExpectancy"),
+        income: num("spouseIncome")
+      };
+    }
+
+    function populateStates() {
+      stateSelect.innerHTML = states.map(s => `<option value="${s.name}">${s.name}</option>`).join("");
+      stateSelect.value = "Utah";
     }
 
     function markDirty() {
@@ -889,13 +846,6 @@
       calculateBtn.classList.remove("btn-primary");
       calculateBtn.classList.add("btn-success");
       calculateBtn.textContent = "✓ Calculated";
-    }
-
-    function populateStates() {
-      stateSelect.innerHTML = states
-        .map(s => `<option value="${s.name}">${s.name}</option>`)
-        .join("");
-      stateSelect.value = "Utah";
     }
 
     function getPillHtml(def) {
@@ -923,34 +873,47 @@
       `;
     }
 
-    function buildFields(prefix, key, type) {
+    function buildContributionFields(prefix, key, balancePlaceholder, annualPlaceholder, pctPlaceholder, growthPlaceholder) {
       const balanceId = `${prefix}_${key}_balance`;
-      const contribId = `${prefix}_${key}_contrib`;
+      const annualId = `${prefix}_${key}_contrib`;
+      const pctId = `${prefix}_${key}_contribPct`;
+      const growthId = `${prefix}_${key}_growth`;
+
+      return `
+        <div class="four-col">
+          <div class="field">
+            <label for="${balanceId}">Current balance ($)</label>
+            <input id="${balanceId}" type="number" min="0" step="100" placeholder="${balancePlaceholder}" />
+          </div>
+          <div class="field">
+            <label for="${annualId}">Annual contribution ($)</label>
+            <input id="${annualId}" type="number" min="0" step="100" placeholder="${annualPlaceholder}" />
+            <div class="hint">Fill this out or use contribution % below.</div>
+          </div>
+          <div class="field">
+            <label for="${pctId}">Contribution (% of income)</label>
+            <input id="${pctId}" type="number" min="0" max="100" step="0.1" placeholder="${pctPlaceholder}" />
+            <div class="hint">Use this instead of annual dollars if you want.</div>
+          </div>
+          <div class="field">
+            <label for="${growthId}">Expected annual growth rate (%)</label>
+            <input id="${growthId}" type="number" min="0" max="20" step="0.1" placeholder="${growthPlaceholder}" />
+          </div>
+        </div>
+      `;
+    }
+
+    function buildFields(prefix, key, type) {
       const matchId = `${prefix}_${key}_match`;
       const profitId = `${prefix}_${key}_profit`;
       const rothSplitId = `${prefix}_${key}_rothSplit`;
-      const growthId = `${prefix}_${key}_growth`;
       const employerFlatId = `${prefix}_${key}_employerFlat`;
       const monthlyBenefitId = `${prefix}_${key}_monthlyBenefit`;
-      const colaId = `${prefix}_${key}_cola`;
+      const balanceId = `${prefix}_${key}_balance`;
 
       if (type === "workplace") {
         return `
-          <div class="three-col">
-            <div class="field">
-              <label for="${balanceId}">Current balance ($)</label>
-              <input id="${balanceId}" type="number" min="0" step="100" placeholder="5000" />
-            </div>
-            <div class="field">
-              <label for="${contribId}">Your annual contribution ($)</label>
-              <input id="${contribId}" type="number" min="0" step="100" placeholder="19000" />
-            </div>
-            <div class="field">
-              <label for="${growthId}">Optional account growth rate (%)</label>
-              <input id="${growthId}" type="number" min="0" max="20" step="0.1" placeholder="Leave blank to use global rate" />
-            </div>
-          </div>
-
+          ${buildContributionFields(prefix, key, "5000", "19000", "10", "8")}
           <div class="three-col">
             <div class="field">
               <label for="${matchId}">Employer match (%)</label>
@@ -968,12 +931,12 @@
 
           <div class="slider-wrap">
             <div class="slider-row">
-              <span>Pretax / Roth split of your contribution</span>
+              <span>Pretax / Roth split of your employee contribution</span>
               <span><strong id="${prefix}_${key}_splitLabel">Pretax 100% · Roth 0%</strong></span>
             </div>
             <input id="${rothSplitId}" type="range" min="0" max="100" value="0" />
             <div class="tiny" style="margin-top:8px;">
-              Slide to show how much of your employee contribution is Roth. Employer money is always treated as pretax.
+              Employer money is always treated as pretax. For the current balance, this calculator also uses this same split to estimate how much is Roth vs pretax.
             </div>
           </div>
         `;
@@ -981,21 +944,7 @@
 
       if (type === "employerHeavy") {
         return `
-          <div class="three-col">
-            <div class="field">
-              <label for="${balanceId}">Current balance ($)</label>
-              <input id="${balanceId}" type="number" min="0" step="100" placeholder="10000" />
-            </div>
-            <div class="field">
-              <label for="${contribId}">Your annual contribution ($)</label>
-              <input id="${contribId}" type="number" min="0" step="100" placeholder="0" />
-            </div>
-            <div class="field">
-              <label for="${growthId}">Optional account growth rate (%)</label>
-              <input id="${growthId}" type="number" min="0" max="20" step="0.1" placeholder="Leave blank to use global rate" />
-            </div>
-          </div>
-
+          ${buildContributionFields(prefix, key, "10000", "0", "0", "8")}
           <div class="three-col">
             <div class="field">
               <label for="${matchId}">Employer contribution (%)</label>
@@ -1015,44 +964,18 @@
 
       if (type === "simpleRetirement") {
         return `
-          <div class="three-col">
-            <div class="field">
-              <label for="${balanceId}">Current balance ($)</label>
-              <input id="${balanceId}" type="number" min="0" step="100" placeholder="5000" />
-            </div>
-            <div class="field">
-              <label for="${contribId}">Annual contribution ($)</label>
-              <input id="${contribId}" type="number" min="0" step="100" placeholder="7500" />
-            </div>
-            <div class="field">
-              <label for="${growthId}">Optional account growth rate (%)</label>
-              <input id="${growthId}" type="number" min="0" max="20" step="0.1" placeholder="Leave blank to use global rate" />
-            </div>
-          </div>
+          ${buildContributionFields(prefix, key, "5000", "7500", "10", "8")}
           <div class="summary-box">
-            This account has no employer match or profit-sharing fields because it does not need them.
+            You can enter either annual dollars or a contribution percentage. You do not need both.
           </div>
         `;
       }
 
       if (type === "simpleNonRetirement") {
         return `
-          <div class="three-col">
-            <div class="field">
-              <label for="${balanceId}">Current balance ($)</label>
-              <input id="${balanceId}" type="number" min="0" step="100" placeholder="10000" />
-            </div>
-            <div class="field">
-              <label for="${contribId}">Annual contribution ($)</label>
-              <input id="${contribId}" type="number" min="0" step="100" placeholder="5000" />
-            </div>
-            <div class="field">
-              <label for="${growthId}">Optional account growth rate (%)</label>
-              <input id="${growthId}" type="number" min="0" max="20" step="0.1" placeholder="Leave blank to use global rate" />
-            </div>
-          </div>
+          ${buildContributionFields(prefix, key, "10000", "5000", "6", "6")}
           <div class="summary-box">
-            Use this for non-retirement money like taxable investing, HYSA savings, or other cash/investment buckets.
+            You can enter either annual dollars or a contribution percentage. You do not need both.
           </div>
         `;
       }
@@ -1061,20 +984,20 @@
         return `
           <div class="three-col">
             <div class="field">
-              <label for="${monthlyBenefitId}">Estimated monthly pension income at retirement ($)</label>
-              <input id="${monthlyBenefitId}" type="number" min="0" step="100" placeholder="2500" />
-            </div>
-            <div class="field">
-              <label for="${colaId}">Optional pension COLA (%)</label>
-              <input id="${colaId}" type="number" min="0" max="10" step="0.1" placeholder="Optional" />
+              <label for="${prefix}_${key}_monthlyBenefit">Estimated monthly pension income at retirement ($)</label>
+              <input id="${prefix}_${key}_monthlyBenefit" type="number" min="0" step="100" placeholder="2500" />
             </div>
             <div class="field">
               <label for="${balanceId}">Optional present value / lump sum ($)</label>
               <input id="${balanceId}" type="number" min="0" step="100" placeholder="Leave blank if unknown" />
             </div>
+            <div class="field">
+              <label for="${prefix}_${key}_growth">Expected annual growth rate (%)</label>
+              <input id="${prefix}_${key}_growth" type="number" min="0" max="20" step="0.1" placeholder="6" />
+            </div>
           </div>
           <div class="summary-box">
-            Pension income is usually not a personal account balance you contribute to directly. Here, the calculator tracks your estimated monthly pension income and can also include an optional lump-sum present value if you know it.
+            Pension income is usually not a personal contribution account. Here, the monthly pension is shown as retirement income, and an optional lump-sum present value can be included if you know it.
           </div>
         `;
       }
@@ -1085,7 +1008,7 @@
     function buildToggleGroup(container, prefix) {
       container.innerHTML = accountDefs.map(def => `
         <label class="toggle-card">
-          <input type="checkbox" id="${prefix}_${def.key}_enabled" data-prefix="${prefix}" data-key="${def.key}">
+          <input type="checkbox" id="${prefix}_${def.key}_enabled">
           <strong>${def.name}</strong>
           <span>${def.description}</span>
         </label>
@@ -1102,13 +1025,13 @@
 
     function renderAccounts(prefix) {
       const container = prefix === "my" ? myAccountsContainer : spouseAccountsContainer;
-      const enabledDefs = accountDefs.filter(def => document.getElementById(`${prefix}_${def.key}_enabled`)?.checked);
+      const enabledDefs = accountDefs.filter(def => getEl(`${prefix}_${def.key}_enabled`)?.checked);
       container.innerHTML = enabledDefs.map(def => makeBaseFields(prefix, def.key, def)).join("");
 
       enabledDefs.forEach(def => {
         if (def.fields === "workplace") {
-          const slider = document.getElementById(`${prefix}_${def.key}_rothSplit`);
-          const label = document.getElementById(`${prefix}_${def.key}_splitLabel`);
+          const slider = getEl(`${prefix}_${def.key}_rothSplit`);
+          const label = getEl(`${prefix}_${def.key}_splitLabel`);
           const updateLabel = () => {
             const roth = Number(slider.value || 0);
             const pretax = 100 - roth;
@@ -1123,21 +1046,26 @@
       });
     }
 
-    function getIncomeForPrefix(prefix) {
-      return prefix === "my" ? num("myIncome") : num("spouseIncome");
+    function resolveContribution(prefix, key, income) {
+      const annualId = `${prefix}_${key}_contrib`;
+      const pctId = `${prefix}_${key}_contribPct`;
+      if (hasValue(annualId)) return num(annualId);
+      if (hasValue(pctId)) return income * (num(pctId) / 100);
+      return 0;
     }
 
-    function getGlobalGrowth() {
-      return num("annualGrowth") / 100;
+    function getOwnerProfile(prefix) {
+      return prefix === "my" ? getUserProfile() : getSpouseProfile();
     }
 
     function getAccountData(prefix, def) {
-      const balance = num(`${prefix}_${def.key}_balance`);
-      const contribution = num(`${prefix}_${def.key}_contrib`);
-      const growthInputEl = document.getElementById(`${prefix}_${def.key}_growth`);
-      const growth = growthInputEl && growthInputEl.value !== "" ? Number(growthInputEl.value) / 100 : getGlobalGrowth();
+      const profile = getOwnerProfile(prefix);
+      const income = profile.income;
 
-      const income = getIncomeForPrefix(prefix);
+      const balance = num(`${prefix}_${def.key}_balance`);
+      const growth = hasValue(`${prefix}_${def.key}_growth`) ? num(`${prefix}_${def.key}_growth`) / 100 : 0.08;
+      const contribution = resolveContribution(prefix, def.key, income);
+
       const matchPct = num(`${prefix}_${def.key}_match`) / 100;
       const profitPct = num(`${prefix}_${def.key}_profit`) / 100;
       const employerFlat = num(`${prefix}_${def.key}_employerFlat`);
@@ -1145,38 +1073,51 @@
 
       let rothEmployee = 0;
       let pretaxEmployee = 0;
+      let pretaxBalance = 0;
+      let rothBalance = 0;
       let annualTotal = contribution;
       let monthlyIncome = 0;
-      let isPension = def.fields === "pension";
+      const isPension = def.fields === "pension";
 
       if (def.fields === "workplace") {
         const rothPct = num(`${prefix}_${def.key}_rothSplit`) / 100;
         rothEmployee = contribution * rothPct;
         pretaxEmployee = contribution - rothEmployee;
         annualTotal += employer;
+
+        rothBalance = balance * rothPct;
+        pretaxBalance = balance - rothBalance;
       } else if (def.fields === "employerHeavy") {
         pretaxEmployee = contribution;
         annualTotal += employer;
+        pretaxBalance = balance;
       } else if (def.fields === "simpleRetirement") {
         if (def.key === "rothIRA") {
           rothEmployee = contribution;
+          rothBalance = balance;
         } else {
           pretaxEmployee = contribution;
+          pretaxBalance = balance;
         }
+      } else if (def.fields === "simpleNonRetirement") {
+        pretaxBalance = balance;
       } else if (def.fields === "pension") {
         monthlyIncome = num(`${prefix}_${def.key}_monthlyBenefit`);
+        pretaxBalance = balance;
         annualTotal = 0;
-        rothEmployee = 0;
-        pretaxEmployee = 0;
       }
 
       return {
-        owner: prefix === "my" ? "You" : "Spouse",
+        owner: profile.owner,
+        profile,
         key: def.key,
-        name: `${prefix === "my" ? "You" : "Spouse"} - ${def.name}`,
-        shortName: def.name,
+        name: `${profile.owner} - ${def.name}`,
+        shortName: `${profile.owner} - ${def.name}`,
+        displayShortName: def.name,
         category: def.category,
         balance,
+        pretaxBalance,
+        rothBalance,
         contribution,
         employer,
         totalAnnual: annualTotal,
@@ -1188,30 +1129,20 @@
       };
     }
 
-    function futureValue(balance, annual, growth, years) {
-      let v = balance;
-      for (let i = 0; i < years; i++) {
-        v = v * (1 + growth) + annual;
-      }
-      return v;
-    }
-
-    function inflationAdjusted(value, inflationRate, years) {
-      return value / Math.pow(1 + inflationRate, years);
-    }
-
     function collectAllAccounts() {
       const all = [];
 
       accountDefs.forEach(def => {
-        const myEnabled = document.getElementById(`my_${def.key}_enabled`)?.checked;
-        if (myEnabled) all.push(getAccountData("my", def));
+        if (getEl(`my_${def.key}_enabled`)?.checked) {
+          all.push(getAccountData("my", def));
+        }
       });
 
       if (includeSpouse.value === "yes") {
         accountDefs.forEach(def => {
-          const spouseEnabled = document.getElementById(`spouse_${def.key}_enabled`)?.checked;
-          if (spouseEnabled) all.push(getAccountData("spouse", def));
+          if (getEl(`spouse_${def.key}_enabled`)?.checked) {
+            all.push(getAccountData("spouse", def));
+          }
         });
       }
 
@@ -1222,21 +1153,33 @@
       return accounts.filter(a => a.category === category);
     }
 
-    function groupByShortName(accounts) {
+    function groupRowsAtUserRetirement(accounts, targetYears) {
       const map = {};
       accounts.forEach(a => {
-        if (!map[a.shortName]) {
-          map[a.shortName] = {
-            name: a.shortName,
-            balance: 0,
-            annual: 0,
-            future: 0
-          };
+        if (!map[a.displayShortName]) {
+          map[a.displayShortName] = { name: a.displayShortName, balance: 0, annual: 0, future: 0 };
         }
-        map[a.shortName].balance += a.balance;
-        map[a.shortName].annual += a.totalAnnual;
+        map[a.displayShortName].balance += a.balance;
+        map[a.displayShortName].annual += a.totalAnnual;
+        map[a.displayShortName].future += valueAtYears(a, targetYears);
       });
       return Object.values(map);
+    }
+
+    function valueAtYears(account, years) {
+      if (account.isPension) return account.balance;
+      let pretax = account.pretaxBalance;
+      let roth = account.rothBalance;
+      for (let y = 1; y <= years; y++) {
+        const ageAtPoint = account.profile.currentAge + y;
+        pretax *= (1 + account.growth);
+        roth *= (1 + account.growth);
+        if (ageAtPoint < account.profile.retirementAge) {
+          pretax += account.pretaxEmployee + account.employer;
+          roth += account.rothEmployee;
+        }
+      }
+      return pretax + roth;
     }
 
     function getFederalRate(income, filing) {
@@ -1259,129 +1202,156 @@
       return states.find(s => s.name === stateName)?.rate || 0;
     }
 
-    function drawChart(canvasId, points, lineLabel) {
-      const canvas = document.getElementById(canvasId);
-      const ctx = canvas.getContext("2d");
-      const w = canvas.width;
-      const h = canvas.height;
+    function simulateTimelines(accounts) {
+      const user = getUserProfile();
+      const spouseOn = includeSpouse.value === "yes";
+      const spouse = getSpouseProfile();
 
-      ctx.clearRect(0, 0, w, h);
+      const endYears = spouseOn
+        ? Math.max(user.lifeExpectancy - user.currentAge, spouse.lifeExpectancy - spouse.currentAge)
+        : Math.max(0, user.lifeExpectancy - user.currentAge);
 
-      const padding = { top: 26, right: 24, bottom: 42, left: 72 };
-      const plotW = w - padding.left - padding.right;
-      const plotH = h - padding.top - padding.bottom;
+      const annualWithdrawal = num("monthlyNeed") * 12;
 
-      const maxY = Math.max(...points.map(p => p.value), 100);
-      const minY = 0;
+      const retirementAccounts = accounts.filter(a => a.category === "retirement" && !a.isPension);
+      const nonRetAccounts = accounts.filter(a => a.category === "nonretirement");
 
-      ctx.strokeStyle = "#dbe6f3";
-      ctx.lineWidth = 1;
+      const pensionMonthly = accounts.filter(a => a.isPension).reduce((sum, a) => sum + a.monthlyIncome, 0);
 
-      for (let i = 0; i <= 5; i++) {
-        const y = padding.top + (plotH / 5) * i;
-        ctx.beginPath();
-        ctx.moveTo(padding.left, y);
-        ctx.lineTo(w - padding.right, y);
-        ctx.stroke();
+      const state = {
+        retirementSources: retirementAccounts.map(a => ({
+          key: a.shortName,
+          label: a.shortName,
+          owner: a.owner,
+          displayShortName: a.displayShortName,
+          pretax: a.pretaxBalance,
+          roth: a.rothBalance,
+          growth: a.growth,
+          pretaxContrib: a.pretaxEmployee + a.employer,
+          rothContrib: a.rothEmployee,
+          retireAge: a.profile.retirementAge,
+          currentAge: a.profile.currentAge
+        })),
+        nonRetSources: nonRetAccounts.map(a => ({
+          key: a.shortName,
+          label: a.shortName,
+          owner: a.owner,
+          displayShortName: a.displayShortName,
+          balance: a.pretaxBalance,
+          growth: a.growth,
+          contrib: a.totalAnnual,
+          retireAge: a.profile.retirementAge,
+          currentAge: a.profile.currentAge
+        }))
+      };
 
-        const labelValue = maxY - ((maxY - minY) / 5) * i;
-        ctx.fillStyle = "#6b7b91";
-        ctx.font = "12px Arial";
-        ctx.fillText(money(labelValue), 8, y + 4);
+      const labels = [];
+      const retirementPretax = [];
+      const retirementRoth = [];
+      const retirementTotal = [];
+      const nonRetTotal = [];
+      const pensionMonthlyArr = [];
+
+      const retirementSourceSeries = {};
+      const nonRetSourceSeries = {};
+
+      state.retirementSources.forEach(s => {
+        retirementSourceSeries[s.label] = [];
+      });
+      state.nonRetSources.forEach(s => {
+        nonRetSourceSeries[s.label] = [];
+      });
+
+      for (let yearOffset = 0; yearOffset <= endYears; yearOffset++) {
+        const userAge = user.currentAge + yearOffset;
+        labels.push(`${userAge}`);
+
+        const currentRetPretax = state.retirementSources.reduce((sum, s) => sum + s.pretax, 0);
+        const currentRetRoth = state.retirementSources.reduce((sum, s) => sum + s.roth, 0);
+        const currentNonRet = state.nonRetSources.reduce((sum, s) => sum + s.balance, 0);
+
+        retirementPretax.push(currentRetPretax);
+        retirementRoth.push(currentRetRoth);
+        retirementTotal.push(currentRetPretax + currentRetRoth);
+        nonRetTotal.push(currentNonRet);
+        pensionMonthlyArr.push(pensionMonthly);
+
+        state.retirementSources.forEach(s => {
+          retirementSourceSeries[s.label].push(s.pretax + s.roth);
+        });
+        state.nonRetSources.forEach(s => {
+          nonRetSourceSeries[s.label].push(s.balance);
+        });
+
+        if (yearOffset === endYears) break;
+
+        state.retirementSources.forEach(s => {
+          s.pretax *= (1 + s.growth);
+          s.roth *= (1 + s.growth);
+        });
+
+        state.nonRetSources.forEach(s => {
+          s.balance *= (1 + s.growth);
+        });
+
+        state.retirementSources.forEach(s => {
+          const ownerAgeNextPoint = s.currentAge + yearOffset + 1;
+          if (ownerAgeNextPoint < s.retireAge) {
+            s.pretax += s.pretaxContrib;
+            s.roth += s.rothContrib;
+          }
+        });
+
+        state.nonRetSources.forEach(s => {
+          const ownerAgeNextPoint = s.currentAge + yearOffset + 1;
+          if (ownerAgeNextPoint < s.retireAge) {
+            s.balance += s.contrib;
+          }
+        });
+
+        const userAgeNextPoint = user.currentAge + yearOffset + 1;
+
+        if (userAgeNextPoint >= user.retirementAge && annualWithdrawal > 0) {
+          const totalInvestable =
+            state.retirementSources.reduce((sum, s) => sum + s.pretax + s.roth, 0) +
+            state.nonRetSources.reduce((sum, s) => sum + s.balance, 0);
+
+          const withdrawalThisYear = Math.min(annualWithdrawal, totalInvestable);
+
+          if (withdrawalThisYear > 0 && totalInvestable > 0) {
+            state.retirementSources.forEach(s => {
+              const sourceTotal = s.pretax + s.roth;
+              if (sourceTotal <= 0) return;
+              const sourceWithdrawal = withdrawalThisYear * (sourceTotal / totalInvestable);
+              const pretaxShare = sourceTotal > 0 ? s.pretax / sourceTotal : 0;
+              const rothShare = sourceTotal > 0 ? s.roth / sourceTotal : 0;
+              s.pretax = Math.max(0, s.pretax - sourceWithdrawal * pretaxShare);
+              s.roth = Math.max(0, s.roth - sourceWithdrawal * rothShare);
+            });
+
+            state.nonRetSources.forEach(s => {
+              const sourceShare = s.balance / totalInvestable;
+              const sourceWithdrawal = withdrawalThisYear * sourceShare;
+              s.balance = Math.max(0, s.balance - sourceWithdrawal);
+            });
+          }
+        }
       }
 
-      ctx.strokeStyle = "#cfdceb";
-      ctx.beginPath();
-      ctx.moveTo(padding.left, padding.top);
-      ctx.lineTo(padding.left, h - padding.bottom);
-      ctx.lineTo(w - padding.right, h - padding.bottom);
-      ctx.stroke();
-
-      if (points.length < 2) return;
-
-      const xStep = plotW / (points.length - 1);
-
-      const pathPoints = points.map((p, i) => {
-        const x = padding.left + i * xStep;
-        const y = padding.top + plotH - ((p.value - minY) / (maxY - minY || 1)) * plotH;
-        return { x, y, label: p.label, value: p.value };
-      });
-
-      const gradient = ctx.createLinearGradient(0, padding.top, 0, h - padding.bottom);
-      gradient.addColorStop(0, "rgba(37,99,235,0.28)");
-      gradient.addColorStop(1, "rgba(37,99,235,0.02)");
-
-      ctx.beginPath();
-      ctx.moveTo(pathPoints[0].x, h - padding.bottom);
-      pathPoints.forEach((p) => ctx.lineTo(p.x, p.y));
-      ctx.lineTo(pathPoints[pathPoints.length - 1].x, h - padding.bottom);
-      ctx.closePath();
-      ctx.fillStyle = gradient;
-      ctx.fill();
-
-      ctx.beginPath();
-      pathPoints.forEach((p, i) => {
-        if (i === 0) ctx.moveTo(p.x, p.y);
-        else ctx.lineTo(p.x, p.y);
-      });
-      ctx.strokeStyle = "#2563eb";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      pathPoints.forEach((p, i) => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = "#1d4ed8";
-        ctx.fill();
-
-        const labelEvery = Math.max(1, Math.ceil(pathPoints.length / 8));
-        if (i === 0 || i === pathPoints.length - 1 || i % labelEvery === 0) {
-          ctx.fillStyle = "#65758b";
-          ctx.font = "12px Arial";
-          ctx.fillText(p.label, p.x - 10, h - 14);
+      return {
+        labels,
+        retirementPretax,
+        retirementRoth,
+        retirementTotal,
+        nonRetTotal,
+        pensionMonthlyArr,
+        retirementSourceSeries,
+        nonRetSourceSeries,
+        markers: {
+          userRetirementIndex: Math.max(0, user.retirementAge - user.currentAge),
+          spouseRetirementIndex: spouseOn ? Math.max(0, spouse.retirementAge - user.currentAge) : null
         }
-      });
-
-      ctx.fillStyle = "#24405e";
-      ctx.font = "bold 13px Arial";
-      ctx.fillText(lineLabel, padding.left, 18);
-    }
-
-    function buildTimeline(accounts, category) {
-      const currentAge = num("currentAge");
-      const retirementAge = num("retirementAge");
-      const lifeExpectancy = num("lifeExpectancy");
-      const monthlyWithdrawal = num("monthlyNeed");
-      const annualWithdrawal = monthlyWithdrawal * 12;
-
-      const filtered = accounts.filter(a => a.category === category && !a.isPension);
-      const totalStartBalance = filtered.reduce((sum, a) => sum + a.balance, 0);
-      const totalAnnualContribution = filtered.reduce((sum, a) => sum + a.totalAnnual, 0);
-
-      let weightedGrowth = 0;
-      const growthWeightBase = filtered.reduce((sum, a) => sum + Math.max(a.balance + a.totalAnnual, 1), 0);
-      filtered.forEach(a => {
-        const weight = Math.max(a.balance + a.totalAnnual, 1) / growthWeightBase;
-        weightedGrowth += a.growth * weight;
-      });
-
-      if (!isFinite(weightedGrowth) || weightedGrowth === 0) weightedGrowth = getGlobalGrowth();
-
-      let value = totalStartBalance;
-      const points = [];
-      points.push({ label: `${currentAge}`, value });
-
-      for (let age = currentAge + 1; age <= lifeExpectancy; age++) {
-        if (age <= retirementAge) {
-          value = value * (1 + weightedGrowth) + totalAnnualContribution;
-        } else {
-          value = value * (1 + weightedGrowth) - annualWithdrawal;
-          if (value < 0) value = 0;
-        }
-        points.push({ label: `${age}`, value });
-      }
-
-      return points;
+      };
     }
 
     function fillTable(tableId, rows) {
@@ -1412,93 +1382,441 @@
       `;
     }
 
-    function calculate() {
-      const years = yearsUntilRetirement();
-      const inflationRate = num("inflationRate") / 100;
-      const showInflAdj = document.getElementById("showInflationAdjusted").value === "yes";
+    function inflationAdjusted(value, inflationRate, years) {
+      return value / Math.pow(1 + inflationRate, years);
+    }
 
+    function drawLineChart(canvasId, tooltipId, config) {
+      const canvas = getEl(canvasId);
+      const tooltip = getEl(tooltipId);
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+
+      const padding = { top: 26, right: 24, bottom: 42, left: 72 };
+      const plotW = w - padding.left - padding.right;
+      const plotH = h - padding.top - padding.bottom;
+
+      const labels = config.labels;
+      const totalSeriesForMax = config.maxSeries || [];
+      const maxY = Math.max(...totalSeriesForMax.flat(), 100);
+      const minY = 0;
+
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = "#dbe6f3";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 5; i++) {
+        const y = padding.top + (plotH / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(w - padding.right, y);
+        ctx.stroke();
+
+        const labelValue = maxY - ((maxY - minY) / 5) * i;
+        ctx.fillStyle = "#6b7b91";
+        ctx.font = "12px Arial";
+        ctx.fillText(money(labelValue), 8, y + 4);
+      }
+
+      ctx.strokeStyle = "#cfdceb";
+      ctx.beginPath();
+      ctx.moveTo(padding.left, padding.top);
+      ctx.lineTo(padding.left, h - padding.bottom);
+      ctx.lineTo(w - padding.right, h - padding.bottom);
+      ctx.stroke();
+
+      const xStep = labels.length > 1 ? plotW / (labels.length - 1) : plotW;
+
+      function xAt(i) {
+        return padding.left + i * xStep;
+      }
+
+      function yAt(value) {
+        return padding.top + plotH - ((value - minY) / (maxY - minY || 1)) * plotH;
+      }
+
+      if (config.stackedAreas) {
+        const base = new Array(labels.length).fill(0);
+
+        config.stackedAreas.forEach(series => {
+          const pathTop = series.values.map((v, i) => ({ x: xAt(i), y: yAt(base[i] + v) }));
+          const pathBottom = series.values.map((v, i) => ({ x: xAt(i), y: yAt(base[i]) }));
+
+          const gradient = ctx.createLinearGradient(0, padding.top, 0, h - padding.bottom);
+          gradient.addColorStop(0, series.fillTop);
+          gradient.addColorStop(1, series.fillBottom);
+
+          ctx.beginPath();
+          ctx.moveTo(pathBottom[0].x, pathBottom[0].y);
+          pathTop.forEach((p, i) => {
+            if (i === 0) ctx.lineTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          });
+          for (let i = pathBottom.length - 1; i >= 0; i--) {
+            ctx.lineTo(pathBottom[i].x, pathBottom[i].y);
+          }
+          ctx.closePath();
+          ctx.fillStyle = gradient;
+          ctx.fill();
+
+          ctx.beginPath();
+          pathTop.forEach((p, i) => {
+            if (i === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          });
+          ctx.strokeStyle = series.stroke;
+          ctx.lineWidth = 3;
+          ctx.stroke();
+
+          for (let i = 0; i < base.length; i++) {
+            base[i] += series.values[i];
+          }
+        });
+      }
+
+      if (config.lines) {
+        config.lines.forEach(series => {
+          ctx.beginPath();
+          series.values.forEach((v, i) => {
+            const x = xAt(i);
+            const y = yAt(v);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.strokeStyle = series.stroke;
+          ctx.lineWidth = series.width || 3;
+          ctx.setLineDash(series.dash || []);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        });
+      }
+
+      if (config.markers) {
+        config.markers.forEach(marker => {
+          if (marker.index == null || marker.index < 0 || marker.index > labels.length - 1) return;
+          const x = xAt(marker.index);
+          ctx.beginPath();
+          ctx.setLineDash(marker.dash || [7, 6]);
+          ctx.moveTo(x, padding.top);
+          ctx.lineTo(x, h - padding.bottom);
+          ctx.strokeStyle = marker.color;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = marker.color;
+          ctx.font = "bold 12px Arial";
+          ctx.fillText(marker.label, Math.min(x + 6, w - padding.right - 80), padding.top + 14);
+        });
+      }
+
+      ctx.fillStyle = "#65758b";
+      ctx.font = "12px Arial";
+      const labelEvery = Math.max(1, Math.ceil(labels.length / 8));
+      labels.forEach((lab, i) => {
+        if (i === 0 || i === labels.length - 1 || i % labelEvery === 0) {
+          ctx.fillText(lab, xAt(i) - 10, h - 14);
+        }
+      });
+
+      chartState[config.stateKey] = {
+        canvasId,
+        tooltipId,
+        labels,
+        xAt,
+        yAt,
+        padding,
+        width: w,
+        height: h,
+        config
+      };
+
+      const handlePointer = (evt) => {
+        const rect = canvas.getBoundingClientRect();
+        const relX = (evt.clientX - rect.left) * (canvas.width / rect.width);
+        const relY = (evt.clientY - rect.top) * (canvas.height / rect.height);
+        const index = Math.max(0, Math.min(labels.length - 1, Math.round((relX - padding.left) / xStep)));
+
+        if (!isFinite(index)) return;
+
+        redrawWithCrosshair();
+        drawCrosshair(canvas, xAt(index), relY);
+
+        tooltip.style.display = "block";
+        tooltip.style.left = `${evt.clientX - rect.left + 10}px`;
+        tooltip.style.top = `${evt.clientY - rect.top}px`;
+        tooltip.innerHTML = config.tooltipBuilder(index);
+      };
+
+      const hideTooltip = () => {
+        tooltip.style.display = "none";
+        redrawWithCrosshair();
+      };
+
+      const redrawWithCrosshair = () => {
+        drawLineChartCore(config);
+      };
+
+      canvas.onmousemove = handlePointer;
+      canvas.onclick = handlePointer;
+      canvas.onmouseleave = hideTooltip;
+    }
+
+    function drawLineChartCore(config) {
+      // small wrapper to avoid duplicated logic in hover redraw
+      const canvas = getEl(config.canvasId);
+      const tooltip = getEl(config.tooltipId);
+      if (tooltip) tooltip.style.display = "none";
+      drawLineChart(config.canvasId, config.tooltipId, Object.assign({}, config, { skipListeners: true }));
+    }
+
+    // override drawLineChart so listeners are not duplicated on internal redraw
+    const originalDrawLineChart = drawLineChart;
+    drawLineChart = function(canvasId, tooltipId, config) {
+      const canvas = getEl(canvasId);
+      const tooltip = getEl(tooltipId);
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+
+      const padding = { top: 26, right: 24, bottom: 42, left: 72 };
+      const plotW = w - padding.left - padding.right;
+      const plotH = h - padding.top - padding.bottom;
+      const labels = config.labels;
+      const totalSeriesForMax = config.maxSeries || [];
+      const maxY = Math.max(...totalSeriesForMax.flat(), 100);
+      const minY = 0;
+
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = "#dbe6f3";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 5; i++) {
+        const y = padding.top + (plotH / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(w - padding.right, y);
+        ctx.stroke();
+
+        const labelValue = maxY - ((maxY - minY) / 5) * i;
+        ctx.fillStyle = "#6b7b91";
+        ctx.font = "12px Arial";
+        ctx.fillText(money(labelValue), 8, y + 4);
+      }
+
+      ctx.strokeStyle = "#cfdceb";
+      ctx.beginPath();
+      ctx.moveTo(padding.left, padding.top);
+      ctx.lineTo(padding.left, h - padding.bottom);
+      ctx.lineTo(w - padding.right, h - padding.bottom);
+      ctx.stroke();
+
+      const xStep = labels.length > 1 ? plotW / (labels.length - 1) : plotW;
+      const xAt = i => padding.left + i * xStep;
+      const yAt = value => padding.top + plotH - ((value - minY) / (maxY - minY || 1)) * plotH;
+
+      if (config.stackedAreas) {
+        const base = new Array(labels.length).fill(0);
+
+        config.stackedAreas.forEach(series => {
+          const pathTop = series.values.map((v, i) => ({ x: xAt(i), y: yAt(base[i] + v) }));
+          const pathBottom = series.values.map((v, i) => ({ x: xAt(i), y: yAt(base[i]) }));
+
+          const gradient = ctx.createLinearGradient(0, padding.top, 0, h - padding.bottom);
+          gradient.addColorStop(0, series.fillTop);
+          gradient.addColorStop(1, series.fillBottom);
+
+          ctx.beginPath();
+          ctx.moveTo(pathBottom[0].x, pathBottom[0].y);
+          pathTop.forEach((p, i) => {
+            if (i === 0) ctx.lineTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          });
+          for (let i = pathBottom.length - 1; i >= 0; i--) {
+            ctx.lineTo(pathBottom[i].x, pathBottom[i].y);
+          }
+          ctx.closePath();
+          ctx.fillStyle = gradient;
+          ctx.fill();
+
+          ctx.beginPath();
+          pathTop.forEach((p, i) => {
+            if (i === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          });
+          ctx.strokeStyle = series.stroke;
+          ctx.lineWidth = 3;
+          ctx.stroke();
+
+          for (let i = 0; i < base.length; i++) {
+            base[i] += series.values[i];
+          }
+        });
+      }
+
+      if (config.lines) {
+        config.lines.forEach(series => {
+          ctx.beginPath();
+          series.values.forEach((v, i) => {
+            const x = xAt(i);
+            const y = yAt(v);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.strokeStyle = series.stroke;
+          ctx.lineWidth = series.width || 3;
+          ctx.setLineDash(series.dash || []);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        });
+      }
+
+      if (config.markers) {
+        config.markers.forEach(marker => {
+          if (marker.index == null || marker.index < 0 || marker.index > labels.length - 1) return;
+          const x = xAt(marker.index);
+          ctx.beginPath();
+          ctx.setLineDash(marker.dash || [7, 6]);
+          ctx.moveTo(x, padding.top);
+          ctx.lineTo(x, h - padding.bottom);
+          ctx.strokeStyle = marker.color;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = marker.color;
+          ctx.font = "bold 12px Arial";
+          ctx.fillText(marker.label, Math.min(x + 6, w - padding.right - 90), padding.top + 14);
+        });
+      }
+
+      ctx.fillStyle = "#65758b";
+      ctx.font = "12px Arial";
+      const labelEvery = Math.max(1, Math.ceil(labels.length / 8));
+      labels.forEach((lab, i) => {
+        if (i === 0 || i === labels.length - 1 || i % labelEvery === 0) {
+          ctx.fillText(lab, xAt(i) - 10, h - 14);
+        }
+      });
+
+      chartState[config.stateKey] = {
+        canvasId, tooltipId, labels, xAt, yAt, padding, width: w, height: h, config
+      };
+
+      if (config.skipListeners) return;
+
+      canvas.onmousemove = evt => {
+        const rect = canvas.getBoundingClientRect();
+        const relX = (evt.clientX - rect.left) * (canvas.width / rect.width);
+        const index = Math.max(0, Math.min(labels.length - 1, Math.round((relX - padding.left) / xStep)));
+
+        drawLineChart(canvasId, tooltipId, Object.assign({}, config, { skipListeners: true }));
+        drawCrosshair(canvas, xAt(index));
+
+        tooltip.style.display = "block";
+        tooltip.style.left = `${evt.clientX - rect.left + 10}px`;
+        tooltip.style.top = `${evt.clientY - rect.top}px`;
+        tooltip.innerHTML = config.tooltipBuilder(index);
+      };
+
+      canvas.onclick = canvas.onmousemove;
+
+      canvas.onmouseleave = () => {
+        tooltip.style.display = "none";
+        drawLineChart(canvasId, tooltipId, Object.assign({}, config, { skipListeners: true }));
+      };
+    };
+
+    function drawCrosshair(canvas, x) {
+      const ctx = canvas.getContext("2d");
+      ctx.beginPath();
+      ctx.moveTo(x, 26);
+      ctx.lineTo(x, canvas.height - 42);
+      ctx.strokeStyle = "rgba(18,32,51,0.38)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4,4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function buildTooltipHtml(title, rows) {
+      return `
+        <strong>${title}</strong>
+        ${rows.map(r => `
+          <div class="tooltip-row">
+            <div>${r.dot ? `<span class="tooltip-dot" style="background:${r.dot}"></span>` : ""}${r.label}</div>
+            <div>${r.value}</div>
+          </div>
+        `).join("")}
+      `;
+    }
+
+    function calculate() {
       const accounts = collectAllAccounts();
+      const yearsToUserRet = yearsUntilRetirement();
+      const inflationRate = num("inflationRate") / 100;
+      const showInflAdj = getEl("showInflationAdjusted").value === "yes";
+      const timelines = simulateTimelines(accounts);
 
       const retirementAccounts = aggregateByCategory(accounts, "retirement");
       const nonRetirementAccounts = aggregateByCategory(accounts, "nonretirement");
 
-      let retirementFuture = 0;
-      let nonRetirementFuture = 0;
-      let totalAnnualContrib = 0;
-      let totalCurrentRetirement = 0;
-      let totalCurrentNonRetirement = 0;
-      let totalRothEmployee = 0;
-      let totalPretaxEmployee = 0;
-      let totalEmployer = 0;
-      let totalPensionMonthly = 0;
+      const retirementAtUserRet = timelines.retirementTotal[Math.min(yearsToUserRet, timelines.retirementTotal.length - 1)] || 0;
+      const nonRetAtUserRet = timelines.nonRetTotal[Math.min(yearsToUserRet, timelines.nonRetTotal.length - 1)] || 0;
+      const grandAtUserRet = retirementAtUserRet + nonRetAtUserRet;
 
-      accounts.forEach(a => {
-        const fv = a.isPension ? a.balance : futureValue(a.balance, a.totalAnnual, a.growth, years);
-        a.future = fv;
-
-        totalAnnualContrib += a.totalAnnual;
-        totalRothEmployee += a.rothEmployee;
-        totalPretaxEmployee += a.pretaxEmployee;
-        totalEmployer += a.employer;
-        totalPensionMonthly += a.monthlyIncome || 0;
-
-        if (a.category === "retirement") {
-          retirementFuture += fv;
-          totalCurrentRetirement += a.balance;
-        } else {
-          nonRetirementFuture += fv;
-          totalCurrentNonRetirement += a.balance;
-        }
-      });
-
-      const grandFuture = retirementFuture + nonRetirementFuture;
-      const monthlyNeed = num("monthlyNeed");
-      const targetPortfolio = monthlyNeed * 12 * 25;
-      const estimatedMonthlyFromPortfolio = grandFuture * 0.04 / 12;
-      const estimatedMonthlyTotal = estimatedMonthlyFromPortfolio + totalPensionMonthly;
+      const totalAnnualContrib = accounts.reduce((sum, a) => sum + a.totalAnnual, 0);
+      const totalCurrentRetirement = retirementAccounts.reduce((sum, a) => sum + a.balance, 0);
+      const totalCurrentNonRetirement = nonRetirementAccounts.reduce((sum, a) => sum + a.balance, 0);
+      const totalRothEmployee = accounts.reduce((sum, a) => sum + a.rothEmployee, 0);
+      const totalPretaxEmployee = accounts.reduce((sum, a) => sum + a.pretaxEmployee, 0);
+      const totalEmployer = accounts.reduce((sum, a) => sum + a.employer, 0);
+      const totalPensionMonthly = accounts.reduce((sum, a) => sum + (a.monthlyIncome || 0), 0);
 
       const combinedIncome = num("myIncome") + (includeSpouse.value === "yes" ? num("spouseIncome") : 0);
-      const federalRate = getFederalRate(combinedIncome, document.getElementById("filingStatus").value);
+      const federalRate = getFederalRate(combinedIncome, getEl("filingStatus").value);
       const stateRate = getStateRate(stateSelect.value);
       const estMarginal = federalRate + stateRate;
 
-      document.getElementById("retirementFutureValue").textContent = money(retirementFuture);
-      document.getElementById("nonRetirementFutureValue").textContent = money(nonRetirementFuture);
-      document.getElementById("annualContributionValue").textContent = money(totalAnnualContrib);
-      document.getElementById("grandFutureValue").textContent = money(grandFuture);
+      const monthlyNeed = num("monthlyNeed");
+      const targetPortfolio = monthlyNeed * 12 * 25;
+      const estimatedMonthlyFromPortfolio = grandAtUserRet * 0.04 / 12;
+      const estimatedMonthlyTotal = estimatedMonthlyFromPortfolio + totalPensionMonthly;
 
-      document.getElementById("retirementFutureMini").textContent =
-        `Current retirement balances: ${money(totalCurrentRetirement)}`;
+      getEl("retirementFutureValue").textContent = money(retirementAtUserRet);
+      getEl("nonRetirementFutureValue").textContent = money(nonRetAtUserRet);
+      getEl("annualContributionValue").textContent = money(totalAnnualContrib);
+      getEl("grandFutureValue").textContent = money(grandAtUserRet);
 
-      document.getElementById("nonRetirementFutureMini").textContent =
-        `Current non-retirement balances: ${money(totalCurrentNonRetirement)}`;
-
-      document.getElementById("annualContributionMini").textContent =
-        `Employee: ${money(totalPretaxEmployee + totalRothEmployee)} · Employer pretax: ${money(totalEmployer)}`;
-
-      document.getElementById("grandFutureMini").textContent =
-        `4% rule estimate: ${money(grandFuture * 0.04)} per year`;
+      getEl("retirementFutureMini").textContent = `Current retirement balances: ${money(totalCurrentRetirement)}`;
+      getEl("nonRetirementFutureMini").textContent = `Current non-retirement balances: ${money(totalCurrentNonRetirement)}`;
+      getEl("annualContributionMini").textContent = `Employee: ${money(totalPretaxEmployee + totalRothEmployee)} · Employer pretax: ${money(totalEmployer)}`;
+      getEl("grandFutureMini").textContent = `4% rule estimate: ${money(grandAtUserRet * 0.04)} per year`;
 
       let summary = `
-        You are projecting <strong>${money(grandFuture)}</strong> by age <strong>${num("retirementAge")}</strong>,
-        made up of <strong>${money(retirementFuture)}</strong> in retirement accounts and
-        <strong>${money(nonRetirementFuture)}</strong> in non-retirement accounts.
+        You are projecting <strong>${money(grandAtUserRet)}</strong> by your retirement age of <strong>${num("retirementAge")}</strong>,
+        made up of <strong>${money(retirementAtUserRet)}</strong> in retirement accounts and
+        <strong>${money(nonRetAtUserRet)}</strong> in non-retirement accounts.
         Your current annual contributions across all enabled accounts are about <strong>${money(totalAnnualContrib)}</strong> per year.
       `;
 
       summary += `
-        Your current employee retirement contribution mix shown here is roughly
+        Your current employee retirement contribution mix is roughly
         <strong>${money(totalPretaxEmployee)}</strong> pretax and
         <strong>${money(totalRothEmployee)}</strong> Roth per year.
-        Employer match, profit sharing, and other employer contributions are treated as
-        <strong>pretax</strong> and total about <strong>${money(totalEmployer)}</strong> annually.
+        Employer match, profit sharing, and other employer contributions are treated as <strong>pretax</strong> and total about
+        <strong>${money(totalEmployer)}</strong> per year.
+      `;
+
+      summary += `
+        The charts now stop contributions when each owner reaches retirement age. Withdrawals begin at
+        <strong>your retirement age</strong>, using the monthly withdrawal amount you entered.
       `;
 
       if (totalPensionMonthly > 0) {
         summary += `
-          You also entered estimated pension income of about
-          <strong>${money(totalPensionMonthly)}</strong> per month in retirement.
-          That pension income is separate from your investable portfolio and is added on top of the portfolio income estimate below.
+          You also entered estimated pension income of about <strong>${money(totalPensionMonthly)}</strong> per month in retirement.
         `;
       }
 
@@ -1512,7 +1830,7 @@
         If your goal is <strong>${money(monthlyNeed)}</strong> per month in retirement withdrawals,
         a rough 25x target would be about <strong>${money(targetPortfolio)}</strong>.
         At a basic 4% rule estimate, your projected portfolio at retirement could support around
-        <strong>${money(grandFuture * 0.04)}</strong> per year, or about
+        <strong>${money(grandAtUserRet * 0.04)}</strong> per year, or about
         <strong>${money(estimatedMonthlyFromPortfolio)}</strong> per month before tax.
       `;
 
@@ -1523,51 +1841,116 @@
         `;
       }
 
-      if (showInflAdj && years > 0) {
-        const inflAdjGrand = inflationAdjusted(grandFuture, inflationRate, years);
+      if (showInflAdj && yearsToUserRet > 0) {
+        const inflAdjGrand = inflationAdjusted(grandAtUserRet, inflationRate, yearsToUserRet);
         summary += `
           In today's dollars, using <strong>${pct(inflationRate * 100)}</strong> inflation,
           that projected total is closer to <strong>${money(inflAdjGrand)}</strong>.
         `;
       }
 
-      document.getElementById("summaryBox").innerHTML = summary;
+      getEl("summaryBox").innerHTML = summary;
 
-      const retirementRows = groupByShortName(retirementAccounts).map(r => {
-        r.future = retirementAccounts
-          .filter(a => a.shortName === r.name)
-          .reduce((sum, a) => sum + a.future, 0);
-        return r;
+      fillTable("retirementTable", groupRowsAtUserRetirement(retirementAccounts, yearsToUserRet));
+      fillTable("nonRetirementTable", groupRowsAtUserRetirement(nonRetirementAccounts, yearsToUserRet));
+
+      const retirementMarkers = [
+        { index: timelines.markers.userRetirementIndex, label: "Your retirement", color: "#16a34a", dash: [7,6] }
+      ];
+
+      if (includeSpouse.value === "yes" && num("spouseRetirementAge") && num("spouseRetirementAge") !== num("retirementAge")) {
+        retirementMarkers.push({
+          index: timelines.markers.spouseRetirementIndex,
+          label: "Spouse retirement",
+          color: "#ea580c",
+          dash: [3,5]
+        });
+      }
+
+      drawLineChart("retirementChart", "retirementTooltip", {
+        canvasId: "retirementChart",
+        tooltipId: "retirementTooltip",
+        stateKey: "retirement",
+        labels: timelines.labels,
+        maxSeries: [timelines.retirementTotal],
+        stackedAreas: [
+          {
+            name: "Pretax",
+            values: timelines.retirementPretax,
+            fillTop: "rgba(37,99,235,0.30)",
+            fillBottom: "rgba(37,99,235,0.06)",
+            stroke: "#2563eb"
+          },
+          {
+            name: "Roth",
+            values: timelines.retirementRoth,
+            fillTop: "rgba(124,58,237,0.28)",
+            fillBottom: "rgba(124,58,237,0.05)",
+            stroke: "#7c3aed"
+          }
+        ],
+        lines: [
+          { values: timelines.retirementTotal, stroke: "#122033", width: 2 }
+        ],
+        markers: retirementMarkers,
+        tooltipBuilder: (index) => {
+          const sourceRows = Object.entries(timelines.retirementSourceSeries)
+            .map(([name, arr]) => ({ name, value: arr[index] || 0 }))
+            .filter(r => r.value > 0)
+            .sort((a,b) => b.value - a.value);
+
+          return buildTooltipHtml(`Age ${timelines.labels[index]}`, [
+            { dot: "#122033", label: "Total retirement", value: money(timelines.retirementTotal[index] || 0) },
+            { dot: "#2563eb", label: "Pretax", value: money(timelines.retirementPretax[index] || 0) },
+            { dot: "#7c3aed", label: "Roth", value: money(timelines.retirementRoth[index] || 0) },
+            ...(timelines.pensionMonthlyArr[index] > 0 ? [{ dot: "#16a34a", label: "Monthly pension", value: money(timelines.pensionMonthlyArr[index] || 0) }] : []),
+            ...sourceRows.map(r => ({ label: r.name, value: money(r.value) }))
+          ]);
+        }
       });
 
-      const nonRetirementRows = groupByShortName(nonRetirementAccounts).map(r => {
-        r.future = nonRetirementAccounts
-          .filter(a => a.shortName === r.name)
-          .reduce((sum, a) => sum + a.future, 0);
-        return r;
+      drawLineChart("nonRetirementChart", "nonRetirementTooltip", {
+        canvasId: "nonRetirementChart",
+        tooltipId: "nonRetirementTooltip",
+        stateKey: "nonretirement",
+        labels: timelines.labels,
+        maxSeries: [timelines.nonRetTotal],
+        lines: [
+          { values: timelines.nonRetTotal, stroke: "#16a34a", width: 3 }
+        ],
+        markers: retirementMarkers,
+        tooltipBuilder: (index) => {
+          const sourceRows = Object.entries(timelines.nonRetSourceSeries)
+            .map(([name, arr]) => ({ name, value: arr[index] || 0 }))
+            .filter(r => r.value > 0)
+            .sort((a,b) => b.value - a.value);
+
+          return buildTooltipHtml(`Age ${timelines.labels[index]}`, [
+            { dot: "#16a34a", label: "Total non-retirement", value: money(timelines.nonRetTotal[index] || 0) },
+            ...sourceRows.map(r => ({ label: r.name, value: money(r.value) }))
+          ]);
+        }
       });
-
-      fillTable("retirementTable", retirementRows);
-      fillTable("nonRetirementTable", nonRetirementRows);
-
-      drawChart("retirementChart", buildTimeline(accounts, "retirement"), "Retirement assets over time");
-      drawChart("nonRetirementChart", buildTimeline(accounts, "nonretirement"), "Non-retirement assets over time");
 
       markCalculated();
     }
 
     function resetAll() {
-      document.getElementById("currentAge").value = "";
-      document.getElementById("retirementAge").value = "";
-      document.getElementById("lifeExpectancy").value = "";
-      document.getElementById("annualGrowth").value = "";
-      document.getElementById("inflationRate").value = "";
-      document.getElementById("myIncome").value = "";
-      document.getElementById("monthlyNeed").value = "";
-      document.getElementById("spouseIncome").value = "";
-      document.getElementById("includeSpouse").value = "no";
-      document.getElementById("filingStatus").value = "single";
-      document.getElementById("showInflationAdjusted").value = "no";
+      getEl("currentAge").value = "";
+      getEl("retirementAge").value = "";
+      getEl("lifeExpectancy").value = "";
+      getEl("monthlyNeed").value = "";
+      getEl("inflationRate").value = "";
+      getEl("myIncome").value = "";
+
+      getEl("includeSpouse").value = "no";
+      getEl("spouseAge").value = "";
+      getEl("spouseRetirementAge").value = "";
+      getEl("spouseLifeExpectancy").value = "";
+      getEl("spouseIncome").value = "";
+
+      getEl("filingStatus").value = "single";
+      getEl("showInflationAdjusted").value = "no";
       stateSelect.value = "Utah";
 
       document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
@@ -1578,16 +1961,42 @@
       renderAccounts("my");
       renderAccounts("spouse");
 
-      document.getElementById("retirementFutureValue").textContent = "$0";
-      document.getElementById("nonRetirementFutureValue").textContent = "$0";
-      document.getElementById("annualContributionValue").textContent = "$0";
-      document.getElementById("grandFutureValue").textContent = "$0";
-      document.getElementById("summaryBox").innerHTML = 'Fill in your accounts and press <span class="accent">Calculate everything</span>.';
+      getEl("retirementFutureValue").textContent = "$0";
+      getEl("nonRetirementFutureValue").textContent = "$0";
+      getEl("annualContributionValue").textContent = "$0";
+      getEl("grandFutureValue").textContent = "$0";
+      getEl("summaryBox").innerHTML = 'Fill in your accounts and press <span class="accent">Calculate everything</span>.';
 
       fillTable("retirementTable", []);
       fillTable("nonRetirementTable", []);
-      drawChart("retirementChart", [{ label: "Now", value: 0 }, { label: "Later", value: 0 }], "Retirement assets over time");
-      drawChart("nonRetirementChart", [{ label: "Now", value: 0 }, { label: "Later", value: 0 }], "Non-retirement assets over time");
+
+      drawLineChart("retirementChart", "retirementTooltip", {
+        canvasId: "retirementChart",
+        tooltipId: "retirementTooltip",
+        stateKey: "retirement",
+        labels: ["Now", "Later"],
+        maxSeries: [[0, 0]],
+        stackedAreas: [
+          { values: [0, 0], fillTop: "rgba(37,99,235,0.30)", fillBottom: "rgba(37,99,235,0.06)", stroke: "#2563eb" },
+          { values: [0, 0], fillTop: "rgba(124,58,237,0.28)", fillBottom: "rgba(124,58,237,0.05)", stroke: "#7c3aed" }
+        ],
+        lines: [{ values: [0, 0], stroke: "#122033", width: 2 }],
+        markers: [],
+        tooltipBuilder: () => buildTooltipHtml("No data yet", []),
+        skipListeners: false
+      });
+
+      drawLineChart("nonRetirementChart", "nonRetirementTooltip", {
+        canvasId: "nonRetirementChart",
+        tooltipId: "nonRetirementTooltip",
+        stateKey: "nonretirement",
+        labels: ["Now", "Later"],
+        maxSeries: [[0, 0]],
+        lines: [{ values: [0, 0], stroke: "#16a34a", width: 3 }],
+        markers: [],
+        tooltipBuilder: () => buildTooltipHtml("No data yet", []),
+        skipListeners: false
+      });
 
       isCalculated = false;
       calculateBtn.classList.remove("btn-success");
@@ -1613,7 +2022,7 @@
     });
 
     calculateBtn.addEventListener("click", calculate);
-    document.getElementById("resetBtn").addEventListener("click", resetAll);
+    getEl("resetBtn").addEventListener("click", resetAll);
 
     populateStates();
     buildToggleGroup(myToggles, "my");
