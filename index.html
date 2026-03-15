@@ -76,23 +76,6 @@
       line-height: 1.55;
     }
 
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .chip {
-      background: rgba(255,255,255,0.78);
-      border: 1px solid rgba(255,255,255,0.88);
-      color: #1e3a5f;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 0.88rem;
-      font-weight: 600;
-    }
-
     .grid {
       display: grid;
       grid-template-columns: 1.2fr 0.8fr;
@@ -499,13 +482,6 @@
         enter balances and contributions, and instantly see retirement totals, non-retirement totals, future projections,
         and a simple Roth vs pretax breakdown where it actually makes sense.
       </p>
-      <div class="chip-row">
-        <div class="chip">Mobile friendly</div>
-        <div class="chip">Only shows relevant account fields</div>
-        <div class="chip">Separate retirement vs non-retirement totals</div>
-        <div class="chip">User + spouse view</div>
-        <div class="chip">Simple projection charts</div>
-      </div>
     </div>
 
     <div class="grid">
@@ -764,17 +740,17 @@
         fields: "workplace"
       },
       {
-        key: "roth401kOnly",
-        name: "Roth 401(k) only",
-        category: "retirement",
-        description: "For a pure Roth 401(k) balance and contribution setup.",
-        fields: "rothOnlyWorkplace"
-      },
-      {
         key: "trad403b",
         name: "403(b)",
         category: "retirement",
         description: "403(b) with employee contribution and employer contribution options.",
+        fields: "workplace"
+      },
+      {
+        key: "account457b",
+        name: "457(b)",
+        category: "retirement",
+        description: "457(b) account with employee contribution and optional employer contribution fields.",
         fields: "workplace"
       },
       {
@@ -804,6 +780,13 @@
         category: "retirement",
         description: "Treated here as a long-term account for planning.",
         fields: "simpleRetirement"
+      },
+      {
+        key: "pension",
+        name: "Pension",
+        category: "retirement",
+        description: "Enter the estimated monthly pension income you expect in retirement.",
+        fields: "pension"
       },
       {
         key: "brokerage",
@@ -900,6 +883,8 @@
       const rothSplitId = `${prefix}_${key}_rothSplit`;
       const growthId = `${prefix}_${key}_growth`;
       const employerFlatId = `${prefix}_${key}_employerFlat`;
+      const monthlyBenefitId = `${prefix}_${key}_monthlyBenefit`;
+      const colaId = `${prefix}_${key}_cola`;
 
       if (type === "workplace") {
         return `
@@ -940,46 +925,8 @@
             </div>
             <input id="${rothSplitId}" type="range" min="0" max="100" value="0" />
             <div class="tiny" style="margin-top:8px;">
-              Slide to show how much of your employee contribution is Roth. Employer money is still treated separately.
+              Slide to show how much of your employee contribution is Roth. Employer money is always treated as pretax.
             </div>
-          </div>
-        `;
-      }
-
-      if (type === "rothOnlyWorkplace") {
-        return `
-          <div class="three-col">
-            <div class="field">
-              <label for="${balanceId}">Current balance ($)</label>
-              <input id="${balanceId}" type="number" min="0" step="100" placeholder="5000" />
-            </div>
-            <div class="field">
-              <label for="${contribId}">Your annual Roth contribution ($)</label>
-              <input id="${contribId}" type="number" min="0" step="100" placeholder="19500" />
-            </div>
-            <div class="field">
-              <label for="${growthId}">Optional account growth rate (%)</label>
-              <input id="${growthId}" type="number" min="0" max="20" step="0.1" placeholder="Leave blank to use global rate" />
-            </div>
-          </div>
-
-          <div class="three-col">
-            <div class="field">
-              <label for="${matchId}">Employer match (%)</label>
-              <input id="${matchId}" type="number" min="0" max="100" step="0.1" placeholder="7" />
-            </div>
-            <div class="field">
-              <label for="${profitId}">Employer profit sharing (%)</label>
-              <input id="${profitId}" type="number" min="0" max="100" step="0.1" placeholder="10" />
-            </div>
-            <div class="field">
-              <label for="${employerFlatId}">Other employer dollars per year ($)</label>
-              <input id="${employerFlatId}" type="number" min="0" step="100" placeholder="Optional" />
-            </div>
-          </div>
-
-          <div class="summary-box">
-            This version treats your employee contribution as <span class="accent">100% Roth</span>.
           </div>
         `;
       }
@@ -1062,6 +1009,28 @@
         `;
       }
 
+      if (type === "pension") {
+        return `
+          <div class="three-col">
+            <div class="field">
+              <label for="${monthlyBenefitId}">Estimated monthly pension income at retirement ($)</label>
+              <input id="${monthlyBenefitId}" type="number" min="0" step="100" placeholder="2500" />
+            </div>
+            <div class="field">
+              <label for="${colaId}">Optional pension COLA (%)</label>
+              <input id="${colaId}" type="number" min="0" max="10" step="0.1" placeholder="Optional" />
+            </div>
+            <div class="field">
+              <label for="${balanceId}">Optional present value / lump sum ($)</label>
+              <input id="${balanceId}" type="number" min="0" step="100" placeholder="Leave blank if unknown" />
+            </div>
+          </div>
+          <div class="summary-box">
+            Pension income is usually not a personal account balance you contribute to directly. Here, the calculator tracks your estimated monthly pension income and can also include an optional lump-sum present value if you know it.
+          </div>
+        `;
+      }
+
       return "";
     }
 
@@ -1121,20 +1090,32 @@
 
       let rothEmployee = 0;
       let pretaxEmployee = 0;
+      let annualTotal = contribution;
+      let monthlyIncome = 0;
+      let isPension = def.fields === "pension";
 
       if (def.fields === "workplace") {
         const rothPct = num(`${prefix}_${def.key}_rothSplit`) / 100;
         rothEmployee = contribution * rothPct;
         pretaxEmployee = contribution - rothEmployee;
-      } else if (def.fields === "rothOnlyWorkplace" || def.key === "rothIRA") {
-        rothEmployee = contribution;
-      } else {
-        pretaxEmployee = contribution;
-      }
-
-      let annualTotal = contribution;
-      if (def.fields === "workplace" || def.fields === "rothOnlyWorkplace" || def.fields === "employerHeavy") {
         annualTotal += employer;
+      } else if (def.fields === "employerHeavy") {
+        pretaxEmployee = contribution;
+        annualTotal += employer;
+      } else if (def.fields === "simpleRetirement") {
+        if (def.key === "rothIRA") {
+          rothEmployee = contribution;
+        } else {
+          pretaxEmployee = contribution;
+        }
+      } else if (def.fields === "simpleNonRetirement") {
+        pretaxEmployee = 0;
+        rothEmployee = 0;
+      } else if (def.fields === "pension") {
+        monthlyIncome = num(`${prefix}_${def.key}_monthlyBenefit`);
+        annualTotal = 0;
+        rothEmployee = 0;
+        pretaxEmployee = 0;
       }
 
       return {
@@ -1149,7 +1130,9 @@
         totalAnnual: annualTotal,
         rothEmployee,
         pretaxEmployee,
-        growth
+        growth,
+        isPension,
+        monthlyIncome
       };
     }
 
@@ -1317,7 +1300,7 @@
     function buildTimeline(accounts, category) {
       const years = yearsUntilRetirement();
       const currentAge = num("currentAge");
-      const filtered = accounts.filter(a => a.category === category);
+      const filtered = accounts.filter(a => a.category === category && !a.isPension);
       const points = [];
 
       for (let yr = 0; yr <= years; yr++) {
@@ -1380,15 +1363,17 @@
       let totalRothEmployee = 0;
       let totalPretaxEmployee = 0;
       let totalEmployer = 0;
+      let totalPensionMonthly = 0;
 
       accounts.forEach(a => {
-        const fv = futureValue(a.balance, a.totalAnnual, a.growth, years);
+        const fv = a.isPension ? a.balance : futureValue(a.balance, a.totalAnnual, a.growth, years);
         a.future = fv;
 
         totalAnnualContrib += a.totalAnnual;
         totalRothEmployee += a.rothEmployee;
         totalPretaxEmployee += a.pretaxEmployee;
         totalEmployer += a.employer;
+        totalPensionMonthly += a.monthlyIncome || 0;
 
         if (a.category === "retirement") {
           retirementFuture += fv;
@@ -1402,7 +1387,8 @@
       const grandFuture = retirementFuture + nonRetirementFuture;
       const monthlyNeed = num("monthlyNeed");
       const targetPortfolio = monthlyNeed * 12 * 25;
-      const yearsAt4Percent = grandFuture * 0.04 / 12;
+      const estimatedMonthlyFromPortfolio = grandFuture * 0.04 / 12;
+      const estimatedMonthlyTotal = estimatedMonthlyFromPortfolio + totalPensionMonthly;
 
       const combinedIncome = num("myIncome") + (includeSpouse.value === "yes" ? num("spouseIncome") : 0);
       const federalRate = getFederalRate(combinedIncome, document.getElementById("filingStatus").value);
@@ -1421,7 +1407,7 @@
         `Current non-retirement balances: ${money(totalCurrentNonRetirement)}`;
 
       document.getElementById("annualContributionMini").textContent =
-        `Employee: ${money(totalPretaxEmployee + totalRothEmployee)} · Employer: ${money(totalEmployer)}`;
+        `Employee: ${money(totalPretaxEmployee + totalRothEmployee)} · Employer pretax: ${money(totalEmployer)}`;
 
       document.getElementById("grandFutureMini").textContent =
         `4% rule estimate: ${money(grandFuture * 0.04)} per year`;
@@ -1436,9 +1422,18 @@
       summary += `
         Your current employee retirement contribution mix shown here is roughly
         <strong>${money(totalPretaxEmployee)}</strong> pretax and
-        <strong>${money(totalRothEmployee)}</strong> Roth per year,
-        while employer-related contributions add about <strong>${money(totalEmployer)}</strong> annually.
+        <strong>${money(totalRothEmployee)}</strong> Roth per year.
+        Employer match, profit sharing, and other employer contributions are treated as
+        <strong>pretax</strong> and total about <strong>${money(totalEmployer)}</strong> annually.
       `;
+
+      if (totalPensionMonthly > 0) {
+        summary += `
+          You also entered estimated pension income of about
+          <strong>${money(totalPensionMonthly)}</strong> per month in retirement.
+          That pension income is separate from your investable portfolio and is added on top of the portfolio income estimate below.
+        `;
+      }
 
       summary += `
         Based on a rough combined marginal tax estimate of about <strong>${pct(estMarginal * 100)}</strong>
@@ -1451,8 +1446,15 @@
         a rough 25x target would be about <strong>${money(targetPortfolio)}</strong>.
         At a basic 4% rule estimate, your projected portfolio could support around
         <strong>${money(grandFuture * 0.04)}</strong> per year, or about
-        <strong>${money(yearsAt4Percent)}</strong> per month before tax.
+        <strong>${money(estimatedMonthlyFromPortfolio)}</strong> per month before tax.
       `;
+
+      if (totalPensionMonthly > 0) {
+        summary += `
+          Including pension income, your estimated total retirement income could be about
+          <strong>${money(estimatedMonthlyTotal)}</strong> per month before tax.
+        `;
+      }
 
       if (showInflAdj && years > 0) {
         const inflAdjGrand = inflationAdjusted(grandFuture, inflationRate, years);
