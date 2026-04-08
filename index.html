@@ -1539,9 +1539,28 @@ if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
       if (yearOffset === endYears) break;
 
       sources.forEach(s => {
-        s.pretax *= (1 + s.growth);
-        s.roth *= (1 + s.growth);
-      });
+  const user = getUserProfile();
+  const isAdvanced = advancedMode.value === "yes";
+
+  const currentAge = user.currentAge + yearOffset;
+
+  let growthRate;
+
+  if (currentAge < user.retirementAge) {
+    // BEFORE retirement
+    growthRate = s.growth;
+  } else {
+    // AFTER retirement
+    if (!isAdvanced) {
+      growthRate = hasValue("postRetReturn") ? num("postRetReturn") / 100 : 0.05;
+    } else {
+      growthRate = hasValue("retPostReturn") ? num("retPostReturn") / 100 : 0.05;
+    }
+  }
+
+  s.pretax *= (1 + growthRate);
+  s.roth *= (1 + growthRate);
+});
 
       sources.forEach(s => {
         const ownerAgeNextPoint = s.currentAge + yearOffset + 1;
@@ -1632,8 +1651,25 @@ if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
       if (yearOffset === endYears) break;
 
       sources.forEach(s => {
-        s.balance *= (1 + s.growth);
-      });
+  const user = getUserProfile();
+  const isAdvanced = advancedMode.value === "yes";
+
+  const currentAge = user.currentAge + yearOffset;
+
+  let growthRate;
+
+  if (currentAge < user.retirementAge) {
+    growthRate = s.growth;
+  } else {
+    if (!isAdvanced) {
+      growthRate = hasValue("postRetReturn") ? num("postRetReturn") / 100 : 0.05;
+    } else {
+      growthRate = hasValue("nonRetPostReturn") ? num("nonRetPostReturn") / 100 : 0.04;
+    }
+  }
+
+  s.balance *= (1 + growthRate);
+});
 
       sources.forEach(s => {
         const ownerAgeNextPoint = s.currentAge + yearOffset + 1;
