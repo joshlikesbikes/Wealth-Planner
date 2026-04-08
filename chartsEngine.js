@@ -273,8 +273,8 @@ function buildSafeSeries(series = []) {
 // ]
 // ----------------------------------------
 
-export function renderRetirementBreakdownChart(canvasId, items = []) {
-    const cleaned = cleanBreakdownData(items)
+erRetirementBreakdownChart(canvasId, items = []) {
+    conexport function rendst cleaned = cleanBreakdownData(items)
     const ctx = getCanvasContext(canvasId)
 
     destroyIfExists(retirementBreakdownChartInstance)
@@ -402,32 +402,54 @@ export function renderRothPretaxChart(canvasId, data = {}) {
 
     destroyIfExists(rothPretaxChartInstance)
 
+    const labels = data.labels || []
+    const roth = buildSafeSeries(data.roth)
+    const pretax = buildSafeSeries(data.pretax)
+    const taxable = buildSafeSeries(data.taxable)
+
+    const total = labels.map((_, index) => {
+        return (roth[index] || 0) + (pretax[index] || 0) + (taxable[index] || 0)
+    })
+
     rothPretaxChartInstance = new Chart(ctx, {
-        type: "bar",
         data: {
-            labels: data.labels || [],
+            labels,
             datasets: [
                 {
+                    type: "bar",
                     label: "Roth",
-                    data: buildSafeSeries(data.roth),
+                    data: roth,
                     backgroundColor: "rgba(147, 51, 234, 0.85)",
                     borderRadius: 8
                 },
                 {
+                    type: "bar",
                     label: "Pretax",
-                    data: buildSafeSeries(data.pretax),
+                    data: pretax,
                     backgroundColor: "rgba(37, 99, 235, 0.85)",
                     borderRadius: 8
                 },
                 {
+                    type: "bar",
                     label: "Taxable",
-                    data: buildSafeSeries(data.taxable),
+                    data: taxable,
                     backgroundColor: "rgba(22, 163, 74, 0.85)",
                     borderRadius: 8
+                },
+                {
+                    type: "line",
+                    label: "Total",
+                    data: total,
+                    borderColor: "#0f172a",
+                    backgroundColor: "rgba(15, 23, 42, 0.08)",
+                    borderWidth: 3,
+                    tension: 0.25,
+                    pointRadius: 4,
+                    pointHoverRadius: 5
                 }
             ]
         },
-        options: buildBarOptions("Roth vs Pretax vs Taxable", true)
+        options: buildBarOptions("Roth vs Pretax vs Taxable", false)
     })
 
     return rothPretaxChartInstance
