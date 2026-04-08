@@ -2044,8 +2044,16 @@ const advancedReturns = document.getElementById("advancedReturns");
     getEl("spouseIncome").value = "";
 
     getEl("filingStatus").value = "single";
-    getEl("showInflationAdjusted").value = "no";
-    stateSelect.value = "Utah";
+getEl("showInflationAdjusted").value = "no";
+getEl("advancedMode").value = "no";
+stateSelect.value = "Utah";
+
+getEl("preRetReturn").value = "";
+getEl("postRetReturn").value = "";
+getEl("retPreReturn").value = "";
+getEl("retPostReturn").value = "";
+getEl("nonRetPreReturn").value = "";
+getEl("nonRetPostReturn").value = "";
 
     document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
 
@@ -2054,6 +2062,7 @@ const advancedReturns = document.getElementById("advancedReturns");
 
     renderAccounts("my");
     renderAccounts("spouse");
+    toggleAdvancedMode();
 
     getEl("retirementFutureValue").textContent = "$0";
     getEl("nonRetirementFutureValue").textContent = "$0";
@@ -2107,6 +2116,11 @@ const advancedReturns = document.getElementById("advancedReturns");
     attachDirtyListeners();
   });
 
+  advancedMode.addEventListener("change", () => {
+  toggleAdvancedMode();
+  markDirty();
+});
+
   calculateBtn.addEventListener("click", calculate);
   getEl("resetBtn").addEventListener("click", resetAll);
 
@@ -2114,9 +2128,10 @@ const advancedReturns = document.getElementById("advancedReturns");
   buildToggleGroup(myToggles, "my");
   buildToggleGroup(spouseToggles, "spouse");
   renderAccounts("my");
-  renderAccounts("spouse");
-  resetAll();
-  attachDirtyListeners();
+renderAccounts("spouse");
+resetAll();
+toggleAdvancedMode();
+attachDirtyListeners();
 </script>
 </body>
 </html>
