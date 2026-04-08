@@ -1095,35 +1095,30 @@ const advancedReturns = document.getElementById("advancedReturns");
     `;
   }
 
-  function buildContributionFields(prefix, key, balancePlaceholder, annualPlaceholder, pctPlaceholder, growthPlaceholder) {
-    const balanceId = `${prefix}_${key}_balance`;
-    const annualId = `${prefix}_${key}_contrib`;
-    const pctId = `${prefix}_${key}_contribPct`;
-    const growthId = `${prefix}_${key}_growth`;
+  function buildContributionFields(prefix, key, balancePlaceholder, annualPlaceholder, pctPlaceholder) {
+  const balanceId = `${prefix}_${key}_balance`;
+  const annualId = `${prefix}_${key}_contrib`;
+  const pctId = `${prefix}_${key}_contribPct`;
 
-    return `
-      <div class="four-col">
-        <div class="field">
-          <label for="${balanceId}">Current balance ($)</label>
-          <input id="${balanceId}" type="number" min="0" step="100" placeholder="${balancePlaceholder}" />
-        </div>
-        <div class="field">
-          <label for="${annualId}">Annual contribution ($)</label>
-          <input id="${annualId}" type="number" min="0" step="100" placeholder="${annualPlaceholder}" />
-          <div class="hint">Fill this out or use contribution %.</div>
-        </div>
-        <div class="field">
-          <label for="${pctId}">Contribution (% of income)</label>
-          <input id="${pctId}" type="number" min="0" max="100" step="0.1" placeholder="${pctPlaceholder}" />
-          <div class="hint">Use this instead of annual dollars if you want.</div>
-        </div>
-        <div class="field">
-          <label for="${growthId}">Expected annual growth rate (%)</label>
-          <input id="${growthId}" type="number" min="0" max="20" step="0.1" placeholder="${growthPlaceholder}" />
-        </div>
+  return `
+    <div class="three-col">
+      <div class="field">
+        <label for="${balanceId}">Current balance ($)</label>
+        <input id="${balanceId}" type="number" min="0" step="100" placeholder="${balancePlaceholder}" />
       </div>
-    `;
-  }
+      <div class="field">
+        <label for="${annualId}">Annual contribution ($)</label>
+        <input id="${annualId}" type="number" min="0" step="100" placeholder="${annualPlaceholder}" />
+        <div class="hint">Fill this out or use contribution %.</div>
+      </div>
+      <div class="field">
+        <label for="${pctId}">Contribution (% of income)</label>
+        <input id="${pctId}" type="number" min="0" max="100" step="0.1" placeholder="${pctPlaceholder}" />
+        <div class="hint">Use this instead of annual dollars if you want.</div>
+      </div>
+    </div>
+  `;
+}
 
   function buildFields(prefix, key, type) {
     const matchId = `${prefix}_${key}_match`;
@@ -1134,7 +1129,7 @@ const advancedReturns = document.getElementById("advancedReturns");
 
     if (type === "workplace") {
       return `
-        ${buildContributionFields(prefix, key, "5000", "19000", "10", "8")}
+        ${buildContributionFields(prefix, key, "5000", "8000", "10")}
         <div class="three-col">
           <div class="field">
             <label for="${matchId}">Employer match (%)</label>
@@ -1165,7 +1160,7 @@ const advancedReturns = document.getElementById("advancedReturns");
 
     if (type === "employerHeavy") {
       return `
-        ${buildContributionFields(prefix, key, "10000", "0", "0", "8")}
+        ${buildContributionFields(prefix, key, "10000", "0", "0")}
         <div class="three-col">
           <div class="field">
             <label for="${matchId}">Employer contribution (%)</label>
@@ -1185,7 +1180,7 @@ const advancedReturns = document.getElementById("advancedReturns");
 
     if (type === "simpleRetirement") {
       return `
-        ${buildContributionFields(prefix, key, "5000", "7500", "10", "8")}
+        ${buildContributionFields(prefix, key, "5000", "7500", "10")}
         <div class="summary-box">
           You can enter either annual dollars or a contribution percentage. You do not need both.
         </div>
@@ -1193,13 +1188,22 @@ const advancedReturns = document.getElementById("advancedReturns");
     }
 
     if (type === "simpleNonRetirement") {
-      return `
-        ${buildContributionFields(prefix, key, "10000", "5000", "6", "6")}
-        <div class="summary-box">
-          You can enter either annual dollars or a contribution percentage. You do not need both.
-        </div>
-      `;
-    }
+  const growthId = `${prefix}_${key}_growth`;
+
+  return `
+    ${buildContributionFields(prefix, key, "10000", "5000", "6")}
+    ${key === "hysa" ? `
+      <div class="field">
+        <label for="${growthId}">HYSA annual rate (%)</label>
+        <input id="${growthId}" type="number" min="0" max="20" step="0.1" placeholder="4.5" />
+        <div class="hint">Use your expected savings rate for this account.</div>
+      </div>
+    ` : ""}
+    <div class="summary-box">
+      You can enter either annual dollars or a contribution percentage. You do not need both.
+    </div>
+  `;
+}
 
     if (type === "pension") {
       return `
@@ -1322,7 +1326,22 @@ const advancedReturns = document.getElementById("advancedReturns");
     const income = profile.income;
 
     const balance = num(`${prefix}_${def.key}_balance`);
-    const growth = hasValue(`${prefix}_${def.key}_growth`) ? num(`${prefix}_${def.key}_growth`) / 100 : 0.08;
+    
+    let growth;
+const isAdvanced = advancedMode.value === "yes";
+
+if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
+  growth = num(`${prefix}_${def.key}_growth`) / 100;
+} else if (!isAdvanced) {
+  growth = hasValue("preRetReturn") ? num("preRetReturn") / 100 : 0.08;
+} else {
+  if (def.category === "retirement") {
+    growth = hasValue("retPreReturn") ? num("retPreReturn") / 100 : 0.08;
+  } else {
+    growth = hasValue("nonRetPreReturn") ? num("nonRetPreReturn") / 100 : 0.06;
+  }
+}
+
     const contribution = resolveContribution(prefix, def.key, income);
 
     const matchPct = num(`${prefix}_${def.key}_match`) / 100;
