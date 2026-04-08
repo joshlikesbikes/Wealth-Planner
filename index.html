@@ -676,7 +676,7 @@
     </div>
   </div>
 
-  <div id="calculatorPage" class="app hidden">
+    <div id="calculatorPage" class="app hidden">
     <div class="hero">
       <h1>Retirement & Wealth Calculator</h1>
       <p>
@@ -799,76 +799,74 @@
           </div>
         </div>
       </div>
+    </div>
 
-      
+    <div class="section">
+      <h2>Results</h2>
+      <p class="sub">This gives you the combined picture for retirement accounts, non-retirement accounts, yearly contributions, and the estimated total at retirement.</p>
+
+      <div class="results-grid">
+        <div class="stat blue">
+          <div class="label">Projected retirement accounts at your retirement</div>
+          <div class="value" id="retirementFutureValue">$0</div>
+          <div class="mini" id="retirementFutureMini">Includes enabled retirement accounts.</div>
+        </div>
+        <div class="stat green">
+          <div class="label">Projected non-retirement accounts at your retirement</div>
+          <div class="value" id="nonRetirementFutureValue">$0</div>
+          <div class="mini" id="nonRetirementFutureMini">Brokerage, HYSA, cash savings, etc.</div>
+        </div>
+        <div class="stat purple">
+          <div class="label">Total annual contributions right now</div>
+          <div class="value" id="annualContributionValue">$0</div>
+          <div class="mini" id="annualContributionMini">Personal + employer + spouse where included.</div>
+        </div>
+        <div class="stat orange">
+          <div class="label">Total projected net worth at your retirement</div>
+          <div class="value" id="grandFutureValue">$0</div>
+          <div class="mini" id="grandFutureMini">Retirement + non-retirement combined.</div>
+        </div>
+      </div>
+
+      <div class="summary-box" id="summaryBox">
+        Fill in your accounts and press <span class="accent">Calculate everything</span>.
+      </div>
+
+      <div class="chart-card" style="margin-top:16px;">
+        <h3>Retirement account totals by account type</h3>
+        <table class="totals-table" id="retirementTable">
+          <thead>
+            <tr>
+              <th>Account</th>
+              <th>Current balance</th>
+              <th>Annual contribution</th>
+              <th>Projected at your retirement</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="chart-card">
+        <h3>Non-retirement account totals by account type</h3>
+        <table class="totals-table" id="nonRetirementTable">
+          <thead>
+            <tr>
+              <th>Account</th>
+              <th>Current balance</th>
+              <th>Annual contribution</th>
+              <th>Projected at your retirement</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="footnote">
+        Planning tool only. Tax and retirement estimates are simplified. For mixed workplace accounts, the current balance is split between pretax and Roth using the same Roth slider ratio you choose for that account.
       </div>
     </div>
-<div>
-        <div class="section">
-          <h2>Results</h2>
-          <p class="sub">This gives you the combined picture for retirement accounts, non-retirement accounts, yearly contributions, and the estimated total at retirement.</p>
 
-          <div class="results-grid">
-            <div class="stat blue">
-              <div class="label">Projected retirement accounts at your retirement</div>
-              <div class="value" id="retirementFutureValue">$0</div>
-              <div class="mini" id="retirementFutureMini">Includes enabled retirement accounts.</div>
-            </div>
-            <div class="stat green">
-              <div class="label">Projected non-retirement accounts at your retirement</div>
-              <div class="value" id="nonRetirementFutureValue">$0</div>
-              <div class="mini" id="nonRetirementFutureMini">Brokerage, HYSA, cash savings, etc.</div>
-            </div>
-            <div class="stat purple">
-              <div class="label">Total annual contributions right now</div>
-              <div class="value" id="annualContributionValue">$0</div>
-              <div class="mini" id="annualContributionMini">Personal + employer + spouse where included.</div>
-            </div>
-            <div class="stat orange">
-              <div class="label">Total projected net worth at your retirement</div>
-              <div class="value" id="grandFutureValue">$0</div>
-              <div class="mini" id="grandFutureMini">Retirement + non-retirement combined.</div>
-            </div>
-          </div>
-
-          <div class="summary-box" id="summaryBox">
-            Fill in your accounts and press <span class="accent">Calculate everything</span>.
-          </div>
-
-          <div class="chart-card" style="margin-top:16px;">
-            <h3>Retirement account totals by account type</h3>
-            <table class="totals-table" id="retirementTable">
-              <thead>
-                <tr>
-                  <th>Account</th>
-                  <th>Current balance</th>
-                  <th>Annual contribution</th>
-                  <th>Projected at your retirement</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <div class="chart-card">
-            <h3>Non-retirement account totals by account type</h3>
-            <table class="totals-table" id="nonRetirementTable">
-              <thead>
-                <tr>
-                  <th>Account</th>
-                  <th>Current balance</th>
-                  <th>Annual contribution</th>
-                  <th>Projected at your retirement</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <div class="footnote">
-            Planning tool only. Tax and retirement estimates are simplified. For mixed workplace accounts, the current balance is split between pretax and Roth using the same Roth slider ratio you choose for that account.
-          </div>
-        </div>
     <div class="charts-section">
       <div class="chart-grid">
         <div class="chart-card">
