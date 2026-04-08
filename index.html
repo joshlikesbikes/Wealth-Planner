@@ -741,28 +741,65 @@
             </div>
           </div>
 
-          <div class="three-col">
-            <div class="field">
-              <label for="filingStatus">Filing status</label>
-              <select id="filingStatus">
-                <option value="single">Single</option>
-                <option value="married">Married filing jointly</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="showInflationAdjusted">Show inflation-adjusted values</label>
-              <select id="showInflationAdjusted">
-                <option value="no">No - show future dollars</option>
-                <option value="yes">Yes - also show today's dollars</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="myIncome">Your annual income ($)</label>
-              <input id="myIncome" type="number" min="0" step="100" placeholder="80000" />
-            </div>
-          </div>
-        </div>
+          <div class="four-col">
+  <div class="field">
+    <label for="filingStatus">Filing status</label>
+    <select id="filingStatus">
+      <option value="single">Single</option>
+      <option value="married">Married filing jointly</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="showInflationAdjusted">Show inflation-adjusted values</label>
+    <select id="showInflationAdjusted">
+      <option value="no">No - show future dollars</option>
+      <option value="yes">Yes - also show today's dollars</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="myIncome">Your annual income ($)</label>
+    <input id="myIncome" type="number" min="0" step="100" placeholder="80000" />
+  </div>
+  <div class="field">
+    <label for="advancedMode">Advanced settings</label>
+    <select id="advancedMode">
+      <option value="no">Off</option>
+      <option value="yes">On</option>
+    </select>
+  </div>
+</div>
 
+<div id="simpleReturns" class="two-col">
+  <div class="field">
+    <label for="preRetReturn">Return before retirement (%)</label>
+    <input id="preRetReturn" type="number" step="0.1" min="0" max="20" placeholder="8" />
+  </div>
+  <div class="field">
+    <label for="postRetReturn">Return after retirement (%)</label>
+    <input id="postRetReturn" type="number" step="0.1" min="0" max="20" placeholder="5" />
+  </div>
+</div>
+
+<div id="advancedReturns" class="hidden">
+  <div class="four-col">
+    <div class="field">
+      <label for="retPreReturn">Retirement return before retirement (%)</label>
+      <input id="retPreReturn" type="number" step="0.1" min="0" max="20" placeholder="8" />
+    </div>
+    <div class="field">
+      <label for="retPostReturn">Retirement return after retirement (%)</label>
+      <input id="retPostReturn" type="number" step="0.1" min="0" max="20" placeholder="5" />
+    </div>
+    <div class="field">
+      <label for="nonRetPreReturn">Non-retirement return before retirement (%)</label>
+      <input id="nonRetPreReturn" type="number" step="0.1" min="0" max="20" placeholder="6" />
+    </div>
+    <div class="field">
+      <label for="nonRetPostReturn">Non-retirement return after retirement (%)</label>
+      <input id="nonRetPostReturn" type="number" step="0.1" min="0" max="20" placeholder="4" />
+    </div>
+  </div>
+</div>
         <div class="section">
           <h2>Your accounts</h2>
           <p class="sub">Turn on only the account types you want included.</p>
@@ -947,16 +984,26 @@
   ];
 
   const stateSelect = document.getElementById("stateSelect");
-  const myToggles = document.getElementById("myAccountToggles");
-  const spouseToggles = document.getElementById("spouseAccountToggles");
-  const myAccountsContainer = document.getElementById("myAccountsContainer");
-  const spouseAccountsContainer = document.getElementById("spouseAccountsContainer");
-  const spouseSection = document.getElementById("spouseSection");
-  const includeSpouse = document.getElementById("includeSpouse");
-  const spouseOnlyFields = document.querySelectorAll(".spouse-only");
-  const calculateBtn = document.getElementById("calculateBtn");
+const myToggles = document.getElementById("myAccountToggles");
+const spouseToggles = document.getElementById("spouseAccountToggles");
+const myAccountsContainer = document.getElementById("myAccountsContainer");
+const spouseAccountsContainer = document.getElementById("spouseAccountsContainer");
+const spouseSection = document.getElementById("spouseSection");
+const includeSpouse = document.getElementById("includeSpouse");
+const spouseOnlyFields = document.querySelectorAll(".spouse-only");
+const calculateBtn = document.getElementById("calculateBtn");
+const advancedMode = document.getElementById("advancedMode");
+const simpleReturns = document.getElementById("simpleReturns");
+const advancedReturns = document.getElementById("advancedReturns");
 
   let isCalculated = false;
+
+  function toggleAdvancedMode() {
+  const isAdvanced = advancedMode.value === "yes";
+
+  simpleReturns.classList.toggle("hidden", isAdvanced);
+  advancedReturns.classList.toggle("hidden", !isAdvanced);
+}
 
   function showCalculator() {
     getEl("homeScreen").classList.add("hidden");
