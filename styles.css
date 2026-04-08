@@ -60,7 +60,41 @@ body {
   min-height: 100vh;
   padding: 16px;
 }
+.home-screen {
+  min-height: calc(100vh - 32px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+}
 
+.home-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("./assets/rainier.jpg") center/cover no-repeat;
+  filter: brightness(0.5);
+  z-index: 0;
+}
+
+.home-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.18),
+    rgba(15, 23, 42, 0.42)
+  );
+  z-index: 0;
+}
+
+.home-card {
+  position: relative;
+  z-index: 1;
+}
 .shell {
   max-width: 1400px;
   margin: 0 auto;
