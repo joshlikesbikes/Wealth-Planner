@@ -751,16 +751,18 @@
   <div class="field">
     <label for="filingStatus">Filing status</label>
     <select id="filingStatus">
-      <option value="single">Single</option>
-      <option value="married">Married filing jointly</option>
-    </select>
+  <option value="" disabled selected>Select filing status</option>
+  <option value="single">Single</option>
+  <option value="married">Married filing jointly</option>
+</select>
   </div>
   <div class="field">
     <label for="showInflationAdjusted">Show inflation-adjusted values</label>
     <select id="showInflationAdjusted">
-      <option value="no">No - show future dollars</option>
-      <option value="yes">Yes - also show today's dollars</option>
-    </select>
+  <option value="" disabled selected>Select option</option>
+  <option value="no">No - show future dollars</option>
+  <option value="yes">Yes - also show today's dollars</option>
+</select>
   </div>
   <div class="field">
     <label for="myIncome">Your annual income ($)</label>
@@ -1042,9 +1044,10 @@ const advancedReturns = document.getElementById("advancedReturns");
   }
 
   function populateStates() {
-    stateSelect.innerHTML = states.map(s => `<option value="${s.name}">${s.name}</option>`).join("");
-    stateSelect.value = "Utah";
-  }
+  stateSelect.innerHTML =
+    `<option value="" disabled selected>Select state</option>` +
+    states.map(s => `<option value="${s.name}">${s.name}</option>`).join("");
+}
 
   function markDirty() {
     if (!isCalculated) return;
@@ -2100,10 +2103,10 @@ if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
     getEl("spouseLifeExpectancy").value = "";
     getEl("spouseIncome").value = "";
 
-    getEl("filingStatus").value = "single";
-getEl("showInflationAdjusted").value = "no";
+    getEl("filingStatus").value = "";
+getEl("showInflationAdjusted").value = "";
 getEl("advancedMode").value = "no";
-stateSelect.value = "Utah";
+stateSelect.value = "";
 
 getEl("preRetReturn").value = "";
 getEl("postRetReturn").value = "";
