@@ -412,44 +412,61 @@ export function renderRothPretaxChart(canvasId, data = {}) {
     })
 
     rothPretaxChartInstance = new Chart(ctx, {
+        type: "line",
         data: {
             labels,
             datasets: [
                 {
-                    type: "bar",
-                    label: "Roth",
-                    data: roth,
-                    backgroundColor: "rgba(147, 51, 234, 0.85)",
-                    borderRadius: 8
-                },
-                {
-                    type: "bar",
                     label: "Pretax",
                     data: pretax,
-                    backgroundColor: "rgba(37, 99, 235, 0.85)",
-                    borderRadius: 8
+                    borderColor: PALETTE.blue,
+                    backgroundColor: "rgba(37, 99, 235, 0.18)",
+                    fill: true,
+                    tension: 0.28,
+                    borderWidth: 3,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                    order: 2
                 },
                 {
-                    type: "bar",
+                    label: "Roth",
+                    data: roth,
+                    borderColor: PALETTE.purple,
+                    backgroundColor: "rgba(147, 51, 234, 0.18)",
+                    fill: true,
+                    tension: 0.28,
+                    borderWidth: 3,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                    order: 3
+                },
+                {
                     label: "Taxable",
                     data: taxable,
-                    backgroundColor: "rgba(22, 163, 74, 0.85)",
-                    borderRadius: 8
+                    borderColor: PALETTE.green,
+                    backgroundColor: "rgba(22, 163, 74, 0.12)",
+                    fill: true,
+                    tension: 0.28,
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                    order: 1
                 },
                 {
-                    type: "line",
                     label: "Total",
                     data: total,
                     borderColor: "#0f172a",
                     backgroundColor: "rgba(15, 23, 42, 0.08)",
-                    borderWidth: 3,
-                    tension: 0.25,
-                    pointRadius: 4,
-                    pointHoverRadius: 5
+                    fill: false,
+                    tension: 0.28,
+                    borderWidth: 4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5,
+                    order: 0
                 }
             ]
         },
-        options: buildBarOptions("Roth vs Pretax vs Taxable", false)
+        options: buildLineOptions("Roth vs Pretax vs Taxable", false)
     })
 
     return rothPretaxChartInstance
