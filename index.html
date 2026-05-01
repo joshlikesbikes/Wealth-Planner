@@ -149,10 +149,12 @@
 }
 
     .field label {
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: #24405e;
-    }
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #24405e;
+  display: flex;
+  align-items: center;
+}
 
     .field .hint {
       font-size: 0.76rem;
@@ -764,7 +766,10 @@
               <input id="retirementAge" type="number" placeholder="60" min="1" max="100" />
             </div>
             <div class="field">
-  <label for="myStopContributingAge">Stop contributing age (optional)</label>
+  <label for="myStopContributingAge">
+  Stop contributing age (optional)
+  <span class="info-icon" data-tooltip="When contributions stop. Leave blank to match retirement age.">i</span>
+</label>
   <input id="myStopContributingAge" type="number" placeholder="60" min="1" max="100" />
 </div>
             <div class="field">
