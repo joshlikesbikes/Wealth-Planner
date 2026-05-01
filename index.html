@@ -1262,13 +1262,27 @@ const advancedReturns = document.getElementById("advancedReturns");
     }
 
     if (type === "simpleRetirement") {
-      return `
-        ${buildContributionFields(prefix, key, "5000", "7500", "10")}
-        <div class="summary-box">
-          You can enter either annual dollars or a contribution percentage. You do not need both.
-        </div>
-      `;
-    }
+  const iraContinueOption = (key === "rothIRA" || key === "tradIRA") ? `
+    <div class="field">
+      <label for="${prefix}_${key}_continueAfterStop">
+        Continue IRA contributions after stop contributing age?
+        <span class="info-icon" data-tooltip="Useful for spousal IRA contributions if household earned income is still available.">i</span>
+      </label>
+      <select id="${prefix}_${key}_continueAfterStop">
+        <option value="no">No</option>
+        <option value="yes">Yes, continue until retirement age</option>
+      </select>
+    </div>
+  ` : "";
+
+  return `
+    ${buildContributionFields(prefix, key, "5000", "7500", "10")}
+    ${iraContinueOption}
+    <div class="summary-box">
+      You can enter either annual dollars or a contribution percentage. You do not need both.
+    </div>
+  `;
+}
 
     if (type === "simpleNonRetirement") {
   const growthId = `${prefix}_${key}_growth`;
@@ -1513,7 +1527,16 @@ if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
 
     return all;
   }
+function shouldContinueContributions(account, ageAtPoint) {
+  const prefix = account.owner === "You" ? "my" : "spouse";
+  const iraContinue = getEl(`${prefix}_${account.key}_continueAfterStop`)?.value === "yes";
 
+  if ((account.key === "rothIRA" || account.key === "tradIRA") && iraContinue) {
+    return ageAtPoint < account.profile.retirementAge;
+  }
+
+  return ageAtPoint < account.profile.stopContributingAge;
+}
   function valueAtYears(account, years) {
     if (account.isPension) return account.balance;
     let pretax = account.pretaxBalance;
@@ -1524,7 +1547,7 @@ if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
       pretax *= (1 + account.growth);
       roth *= (1 + account.growth);
 
-      if (ageAtPoint < account.profile.stopContributingAge) {
+      if (shouldContinueContributions(account, ageAtPoint)) {
   pretax += account.pretaxEmployee + account.employer;
   roth += account.rothEmployee;
 }
@@ -1644,7 +1667,8 @@ stopContributingAge: a.profile.stopContributingAge,
 
       sources.forEach(s => {
         const ownerAgeNextPoint = s.currentAge + yearOffset + 1;
-        if (ownerAgeNextPoint < s.stopContributingAge) {
+        const accountMatch = retirementAccounts.find(a => a.shortName === s.label);
+if (accountMatch && shouldContinueContributions(accountMatch, ownerAgeNextPoint)) {
   s.pretax += s.pretaxContrib;
   s.roth += s.rothContrib;
 }
@@ -2097,18 +2121,29 @@ stopContributingAge: a.profile.stopContributingAge,
     fillTable("nonRetirementTable", groupRowsAtUserRetirement(nonRetirementAccounts, yearsToUserRet));
 
     const markers = [
-  { index: retirementTimeline.markers.userStopContributingIndex, label: "Stop contrib.", color: "#2563eb", dash: [4,4] },
+  { index: retirementTimeline.markers.userStopContributingIndex, label: "You stop contributing", color: "#2563eb", dash: [4,4] },
   { index: retirementTimeline.markers.userRetirementIndex, label: "Your retirement", color: "#16a34a", dash: [7,6] }
 ];
 
-    if (includeSpouse.value === "yes" && num("spouseRetirementAge") && num("spouseRetirementAge") !== num("retirementAge")) {
-      markers.push({
-        index: retirementTimeline.markers.spouseRetirementIndex,
-        label: "Spouse retirement",
-        color: "#ea580c",
-        dash: [3,5]
-      });
-    }
+    if (includeSpouse.value === "yes") {
+  if (retirementTimeline.markers.spouseStopContributingIndex !== null) {
+    markers.push({
+      index: retirementTimeline.markers.spouseStopContributingIndex,
+      label: "Spouse stops contributing",
+      color: "#7c3aed",
+      dash: [4,4]
+    });
+  }
+
+  if (num("spouseRetirementAge") && num("spouseRetirementAge") !== num("retirementAge")) {
+    markers.push({
+      index: retirementTimeline.markers.spouseRetirementIndex,
+      label: "Spouse retirement",
+      color: "#ea580c",
+      dash: [3,5]
+    });
+  }
+}
 
     drawLineChart("retirementChart", "retirementTooltip", {
       labels: retirementTimeline.labels,
