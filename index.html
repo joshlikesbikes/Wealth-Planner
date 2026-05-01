@@ -669,6 +669,37 @@
     width: 100%;
   }
 }
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+}
+
+.info-icon:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #122033;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  z-index: 10;
+}
   </style>
 </head>
   <body>
@@ -726,7 +757,10 @@
               <input id="currentAge" type="number" placeholder="25" min="0" max="100" />
             </div>
             <div class="field">
-              <label for="retirementAge">Retirement age</label>
+              <label for="retirementAge">
+  Retirement age
+  <span class="info-icon" data-tooltip="When you plan to start taking money out of your accounts.">i</span>
+</label>
 <div class="hint">The age when you plan to start taking money out of your accounts.</div>
               <input id="retirementAge" type="number" placeholder="60" min="1" max="100" />
             </div>
