@@ -142,10 +142,14 @@
     }
 
     .field {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 6px;
-  align-content: end;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.field label {
+  min-height: 32px;
 }
 
     .field label {
