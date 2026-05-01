@@ -725,9 +725,15 @@
               <input id="currentAge" type="number" placeholder="25" min="0" max="100" />
             </div>
             <div class="field">
-              <label for="retirementAge">Your retirement age</label>
+              <label for="retirementAge">Retirement age</label>
+<div class="hint">The age when you plan to start taking money out of your accounts.</div>
               <input id="retirementAge" type="number" placeholder="60" min="1" max="100" />
             </div>
+            <div class="field">
+  <label for="myStopContributingAge">Stop contributing age (optional)</label>
+  <div class="hint">The age when you plan to stop adding new money. Leave blank to use retirement age.</div>
+  <input id="myStopContributingAge" type="number" placeholder="60" min="1" max="100" />
+</div>
             <div class="field">
               <label for="lifeExpectancy">Your life expectancy</label>
               <input id="lifeExpectancy" type="number" placeholder="90" min="1" max="120" />
@@ -832,9 +838,16 @@
               <input id="spouseAge" type="number" min="0" max="100" placeholder="24" />
             </div>
             <div class="field spouse-only hidden">
-              <label for="spouseRetirementAge">Spouse retirement age</label>
-              <input id="spouseRetirementAge" type="number" min="1" max="100" placeholder="60" />
-            </div>
+  <label for="spouseRetirementAge">Spouse retirement age</label>
+  <div class="hint">The age when your spouse plans to start taking money out.</div>
+  <input id="spouseRetirementAge" type="number" min="1" max="100" placeholder="60" />
+</div>
+
+<div class="field spouse-only hidden">
+  <label for="spouseStopContributingAge">Stop contributing age (optional)</label>
+  <div class="hint">The age when your spouse plans to stop adding new money. Leave blank to use retirement age.</div>
+  <input id="spouseStopContributingAge" type="number" min="1" max="100" placeholder="60" />
+</div>
             <div class="field spouse-only hidden">
               <label for="spouseLifeExpectancy">Spouse life expectancy</label>
               <input id="spouseLifeExpectancy" type="number" min="1" max="120" placeholder="90" />
