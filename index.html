@@ -1129,24 +1129,34 @@ const advancedReturns = document.getElementById("advancedReturns");
   }
 
   function getUserProfile() {
-    return {
-      owner: "You",
-      currentAge: num("currentAge"),
-      retirementAge: num("retirementAge"),
-      lifeExpectancy: num("lifeExpectancy"),
-      income: num("myIncome")
-    };
-  }
+  const retirementAge = num("retirementAge");
+
+  return {
+    owner: "You",
+    currentAge: num("currentAge"),
+    retirementAge,
+    stopContributingAge: hasValue("myStopContributingAge")
+      ? num("myStopContributingAge")
+      : retirementAge,
+    lifeExpectancy: num("lifeExpectancy"),
+    income: num("myIncome")
+  };
+}
 
   function getSpouseProfile() {
-    return {
-      owner: "Spouse",
-      currentAge: num("spouseAge"),
-      retirementAge: num("spouseRetirementAge"),
-      lifeExpectancy: num("spouseLifeExpectancy"),
-      income: num("spouseIncome")
-    };
-  }
+  const retirementAge = num("spouseRetirementAge");
+
+  return {
+    owner: "Spouse",
+    currentAge: num("spouseAge"),
+    retirementAge,
+    stopContributingAge: hasValue("spouseStopContributingAge")
+      ? num("spouseStopContributingAge")
+      : retirementAge,
+    lifeExpectancy: num("spouseLifeExpectancy"),
+    income: num("spouseIncome")
+  };
+}
 
   function yearsUntilUserRetirement() {
     return Math.max(0, num("retirementAge") - num("currentAge"));
@@ -1514,10 +1524,10 @@ if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
       pretax *= (1 + account.growth);
       roth *= (1 + account.growth);
 
-      if (ageAtPoint < account.profile.retirementAge) {
-        pretax += account.pretaxEmployee + account.employer;
-        roth += account.rothEmployee;
-      }
+      if (ageAtPoint < account.profile.stopContributingAge) {
+  pretax += account.pretaxEmployee + account.employer;
+  roth += account.rothEmployee;
+}
     }
     return pretax + roth;
   }
@@ -1577,6 +1587,7 @@ if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
       pretaxContrib: a.pretaxEmployee + a.employer,
       rothContrib: a.rothEmployee,
       retireAge: a.profile.retirementAge,
+stopContributingAge: a.profile.stopContributingAge,
       currentAge: a.profile.currentAge
     }));
 
@@ -1633,10 +1644,10 @@ if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
 
       sources.forEach(s => {
         const ownerAgeNextPoint = s.currentAge + yearOffset + 1;
-        if (ownerAgeNextPoint < s.retireAge) {
-          s.pretax += s.pretaxContrib;
-          s.roth += s.rothContrib;
-        }
+        if (ownerAgeNextPoint < s.stopContributingAge) {
+  s.pretax += s.pretaxContrib;
+  s.roth += s.rothContrib;
+}
       });
 
       const userAgeNextPoint = user.currentAge + yearOffset + 1;
@@ -1697,6 +1708,7 @@ if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
       growth: a.growth,
       contrib: a.totalAnnual,
       retireAge: a.profile.retirementAge,
+stopContributingAge: a.profile.stopContributingAge,
       currentAge: a.profile.currentAge
     }));
 
@@ -1742,9 +1754,9 @@ if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
 
       sources.forEach(s => {
         const ownerAgeNextPoint = s.currentAge + yearOffset + 1;
-        if (ownerAgeNextPoint < s.retireAge) {
-          s.balance += s.contrib;
-        }
+        if (ownerAgeNextPoint < s.stopContributingAge) {
+  s.balance += s.contrib;
+}
       });
 
       const userAgeNextPoint = user.currentAge + yearOffset + 1;
@@ -2160,10 +2172,12 @@ if (def.key === "hysa" && hasValue(`${prefix}_${def.key}_growth`)) {
     getEl("monthlyNeed").value = "";
     getEl("inflationRate").value = "";
     getEl("myIncome").value = "";
+    getEl("myStopContributingAge").value = "";
 
     getEl("includeSpouse").value = "no";
     getEl("spouseAge").value = "";
     getEl("spouseRetirementAge").value = "";
+    getEl("spouseStopContributingAge").value = "";
     getEl("spouseLifeExpectancy").value = "";
     getEl("spouseIncome").value = "";
 
