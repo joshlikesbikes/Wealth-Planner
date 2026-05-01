@@ -1683,9 +1683,11 @@ stopContributingAge: a.profile.stopContributingAge,
       pensionSeries,
       sourceSeries,
       markers: {
-        userRetirementIndex: Math.max(0, user.retirementAge - user.currentAge),
-        spouseRetirementIndex: spouseOn ? Math.max(0, spouse.retirementAge - user.currentAge) : null
-      }
+  userRetirementIndex: Math.max(0, user.retirementAge - user.currentAge),
+  userStopContributingIndex: Math.max(0, user.stopContributingAge - user.currentAge),
+  spouseRetirementIndex: spouseOn ? Math.max(0, spouse.retirementAge - user.currentAge) : null,
+  spouseStopContributingIndex: spouseOn ? Math.max(0, spouse.stopContributingAge - user.currentAge) : null
+}
     };
   }
 
@@ -1779,9 +1781,11 @@ stopContributingAge: a.profile.stopContributingAge,
       totalSeries,
       sourceSeries,
       markers: {
-        userRetirementIndex: Math.max(0, user.retirementAge - user.currentAge),
-        spouseRetirementIndex: spouseOn ? Math.max(0, spouse.retirementAge - user.currentAge) : null
-      }
+  userRetirementIndex: Math.max(0, user.retirementAge - user.currentAge),
+  userStopContributingIndex: Math.max(0, user.stopContributingAge - user.currentAge),
+  spouseRetirementIndex: spouseOn ? Math.max(0, spouse.retirementAge - user.currentAge) : null,
+  spouseStopContributingIndex: spouseOn ? Math.max(0, spouse.stopContributingAge - user.currentAge) : null
+}
     };
   }
 
@@ -2093,8 +2097,9 @@ stopContributingAge: a.profile.stopContributingAge,
     fillTable("nonRetirementTable", groupRowsAtUserRetirement(nonRetirementAccounts, yearsToUserRet));
 
     const markers = [
-      { index: retirementTimeline.markers.userRetirementIndex, label: "Your retirement", color: "#16a34a", dash: [7,6] }
-    ];
+  { index: retirementTimeline.markers.userStopContributingIndex, label: "Stop contrib.", color: "#2563eb", dash: [4,4] },
+  { index: retirementTimeline.markers.userRetirementIndex, label: "Your retirement", color: "#16a34a", dash: [7,6] }
+];
 
     if (includeSpouse.value === "yes" && num("spouseRetirementAge") && num("spouseRetirementAge") !== num("retirementAge")) {
       markers.push({
